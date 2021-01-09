@@ -3,7 +3,7 @@ The JavaScript library for [ExtensionPay.com](https://extensionpay.com), a servi
 
 Below are the directions for using this library. If you learn better by example, you can also view the sample extension.
 
-##### [Sample Extension Code](sample-extension/)
+#### [Sample Extension Code](sample-extension/)
 
 ### 1. Install
 
