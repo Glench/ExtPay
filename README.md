@@ -4,11 +4,13 @@ The JavaScript library for [ExtensionPay.com](https://extensionpay.com), a servi
 Below are the directions for using this library. If you learn better by example, you can also view the **[sample extension](sample-extension/)**.
 
 ### 1. Install
+
+Copy the [dist/ExtPay.js](dist/ExtPay.js) file into your project, or, if you're using a bundler:
+
 ```bash
 npm install extpay --save
 ```
 
-or copy the [dist/ExtPay.js](dist/ExtPay.js) file into your project
 
 ### 2. Add extension permissions to your `manifest.json`
 ExtPay needs the following permissions in your `manifest.json`:
