@@ -48,7 +48,7 @@ Then initialize ExtPay with your extension `short-id`, which you need to get by 
 const extpay = ExtPay('sample-extension')
 ```
 
-(Using a bundler? You can also `import` or `require` `ExtPay`.)
+(Using a bundler? You can `import` or `require` `ExtPay`.)
 
 ### 4. Use `extpay.getUser()` to check user's paid status
 
