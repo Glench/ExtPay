@@ -1,0 +1,35 @@
+{
+  "name": "extpay",
+  "version": "1.0.0",
+  "description": "The JavaScript library for https://extensionpay.com - payments for browser extensions, no server needed.",
+  "main": "./dist/ExtPay.common.js",
+  "module": "./dist/ExtPay.module.js",
+  "unpkg": "./dist/ExtPay.js",
+  "jsdelivr": "./dist/ExtPay.js",
+  "scripts": {
+    "replace": "sed -i \"s|http://localhost:3000|https://extensionpay\\.com|g\" sample-extension/manifest.json",
+    "dev": "rollup -w -c rollup.config.dev.js",
+    "release": "rollup -c rollup.config.release.js && replace"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Glench/ExtPay.git"
+  },
+  "keywords": [
+    "browser",
+    "extension",
+    "chrome-extension",
+    "firefox-extension",
+    "payments"
+  ],
+  "author": "ExtensionPay.com",
+  "license": "AGPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/Glench/ExtPay/issues"
+  },
+  "homepage": "https://extensionpay.com",
+  "devDependencies": {
+    "@rollup/plugin-replace": "^2.3.4",
+    "rollup": "^2.36.1"
+  }
+}
