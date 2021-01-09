@@ -57,7 +57,7 @@ or use `await`:
 ```js
 async function foo() {
     const user = await extpay.getUser();
-    // if (user.paid) {
+    // if (user.paid) ...
 }
 ```
 The `user` object has the following properties:

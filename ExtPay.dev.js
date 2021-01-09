@@ -118,22 +118,21 @@ You can copy and paste this to your manifest.json file to fix this error:
                 // TODO: think harder about error states and what users will want (bad connection, server error, id not found)
                 if (!resp.ok) return reject() 
 
-                const user = await resp.json();
-                if (user.paidAt) {
-                    user.paidAt = new Date(user.paidAt)
-                }
-                if (user.installedAt) {
-                    user.installedAt = new Date(user.installedAt)
-                }
+                const user_data = await resp.json();
                 browser.storage.sync.get(['extensionpay_user'], function(storage) {
-                    browser.storage.sync.set({extensionpay_user: user})
-                    if (user.paid) {
+                    browser.storage.sync.set({extensionpay_user: user_data})
+                    if (user_data.paid) {
                         if (!storage.extensionpay_user || (storage.extensionpay_user && !storage.extensionpay_user.paid)) {
                             // paid_callbacks.forEach(cb => cb(user))
                         }
                     }
                 })
-                resolve(user)
+                const parsed_user = {
+                    paid: user_data.paid,
+                    paidAt: user_data.paidAt ? new Date(user_data.paidAt) : null,
+                    installedAt: new Date(user_data.installedAt),
+                }
+                resolve(parsed_user)
             })
         })
     }
