@@ -8,7 +8,7 @@ Below are the directions for using this library. If you learn better by example,
 npm install extpay --save
 ```
 
-or copy the [build/ExtPay.js](build/ExtPay.js) file into your project
+or copy the [dist/ExtPay.js](dist/ExtPay.js) file into your project
 
 ### 2. Add extension permissions to your `manifest.json`
 ExtPay needs the following permissions in your `manifest.json`:
