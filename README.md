@@ -17,7 +17,6 @@ ExtPay needs the following permissions in your `manifest.json`:
 ```json
 {
     "manifest_version": 2,
-    // ...
     "permissions": [
         "https://extensionpay.com/*",
         "storage"
