@@ -1,4 +1,4 @@
-const extpay = ExtPay('derp-extension') 
+const extpay = ExtPay('sample-extension') 
 
 document.querySelector('button').addEventListener('click', extpay.openPaymentPage)
 
