@@ -10,7 +10,7 @@
     "replace_local": "sed -i '' \"s|http://localhost:3000|https://extensionpay\\.com|g\" sample-extension/manifest.json",
     "replace_extpay": "sed -i '' \"s|https://extensionpay\\.com|http://localhost:3000|g\" sample-extension/manifest.json",
     "dev": "npm run replace_extpay && rollup -w -c rollup.config.dev.js || npm run replace_local",
-    "release": "rollup -c rollup.config.release.js && npm run replace_local"
+    "dist": "rollup -c rollup.config.release.js && npm run replace_local"
   },
   "repository": {
     "type": "git",
