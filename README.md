@@ -1,5 +1,5 @@
-# ExtPay — Payments for browser extensions on [extensionpay.com](https://extensionpay.com)
-The JavaScript library for [ExtensionPay.com](https://extensionpay.com), a service to add payments to browser extensions. It uses [webextension-polyfill](https://github.com/mozilla/webextension-polyfill) internally for compatability across browsers.
+# ExtPay — Payments for browser extensions
+The JavaScript library for [ExtensionPay.com](https://extensionpay.com), a service to easily add payments to browser extensions. It uses [webextension-polyfill](https://github.com/mozilla/webextension-polyfill) internally for compatability across browsers. 
 
 Below are the directions for using this library in your browser extension. If you learn better by example, you can also view the sample extension:
 
@@ -7,7 +7,7 @@ Below are the directions for using this library in your browser extension. If yo
 
 ### 1. Install
 
-Copy the [dist/ExtPay.js](dist/ExtPay.js) file into your project, or, if you're using a bundler:
+Copy the [dist/ExtPay.js](dist/ExtPay.js) file into your project, or, if you're using a bundler (like Webpack or Rollup):
 
 ```bash
 npm install extpay --save
@@ -32,7 +32,7 @@ Right now the library doesn't support adding these as optional permissions but m
 
 You need to put a call to ExtPay in a background file, often named something like `background.js`.
 
-First, add `ExtPay.js` to `manifest.json` if you're not using the bundler:
+First, add `ExtPay.js` to `manifest.json` if you're not using a bundler:
 ```js
 {
     "background": {
@@ -41,7 +41,7 @@ First, add `ExtPay.js` to `manifest.json` if you're not using the bundler:
 }
 ```
 
-Then initialize ExtPay with your extension `short-id`, which you need to get by [signing up and registering an extension](https://extensionpay.com). In the example below, the `short-id` is `sample-extension`.
+Then initialize ExtPay with your extension `short-id`, which you need to get by **[signing up and registering an extension](https://extensionpay.com)**. In the example below, the `short-id` is `sample-extension`.
 
 ```js
 // background.js
@@ -79,7 +79,7 @@ Opens a browser popup where the user can pay for the extension. You can bind thi
 ```js
 extpay.openPaymentPage()
 ```
-It looks like this:
+The payment page looks like this:
 
 ![popup screenshot](popup_screenshot.png)
 
