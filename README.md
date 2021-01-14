@@ -1,5 +1,5 @@
 # ExtPay — Payments for browser extensions on [extensionpay.com](https://extensionpay.com)
-The JavaScript library for [ExtensionPay.com](https://extensionpay.com), a service to add payments to browser extensions.
+The JavaScript library for [ExtensionPay.com](https://extensionpay.com), a service to add payments to browser extensions. It uses [webextension-polyfill](https://github.com/mozilla/webextension-polyfill) internally for compatability across browsers.
 
 Below are the directions for using this library in your browser extension. If you learn better by example, you can also view the sample extension:
 
