@@ -1339,10 +1339,20 @@ You can copy and paste this to your manifest.json file to fix this error:
 	        }
 	    }
 
-	    // var paid_callbacks = [];
+	    function timeout(ms) {
+	        return new Promise(resolve => setTimeout(resolve, ms));
+	    }
 
 	    async function fetch_user() {
-	        const storage = await get(['extensionpay_api_key', 'extensionpay_user']);
+	        var storage = await get(['extensionpay_api_key', 'extensionpay_user']);
+	        // wait 10 seconds for api key to be returned if creator is running this in background.js immediately after extpay initialization
+	        for (var i=0; i < 20; ++i) {
+	            if (storage.extensionpay_api_key) break;
+	            await timeout(500);
+	            storage = await get(['extensionpay_api_key', 'extensionpay_user']);
+	        }
+	        if (!storage.extensionpay_api_key) throw 'Error registering user.'
+
 	        const resp = await fetch(`${EXTENSION_URL}/api/user?api_key=${storage.extensionpay_api_key}`, {
 	            method: 'GET',
 	            headers: {
