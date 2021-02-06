@@ -10,7 +10,7 @@
     },
     "content_scripts": [
         {
-            "matches": ["http://localhost:3000/*"],
+            "matches": ["https://extensionpay.com/*"],
             "js": ["ExtPay.js"],
             "run_at": "document_start"
         }
@@ -19,7 +19,7 @@
         "default_popup": "popup.html"
     },
     "permissions": [
-        "http://localhost:3000/*",
+        "https://extensionpay.com/*",
         "storage"
     ]
 }

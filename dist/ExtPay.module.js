@@ -15,7 +15,7 @@ if (typeof window !== 'undefined') {
 function ExtPay(extension_id) {
 
     const HOST = `https://extensionpay.com`;
-    var EXTENSION_URL = `${HOST}/extension/${extension_id}`;
+    const EXTENSION_URL = `${HOST}/extension/${extension_id}`;
 
     async function get(key) {
         try {
@@ -64,9 +64,39 @@ You can copy and paste this to your manifest.json file to fix this error:
  `
             }
 
-            const content_script_error = `ExtPay Setup Error: please include ExtPay.js as a content script.`;
-            console.log(content_script_error);
-            console.log('hello');
+            const content_script_template = `"content_scripts": [
+    {
+        "matches": ["${HOST}/*"],
+        "js": ["ExtPay.js"],
+        "run_at": "document_start"
+    }]`;
+            var manifest_resp;
+            try {
+                manifest_resp = await fetch('manifest.json');
+            } catch(e) {
+                throw 'ExtPay setup error: cannot locate manifest.json in top-level. If this is a problem for you, please contact me so I can add a feature for you.'
+            }
+            const manifest = await manifest_resp.json();
+            if (!manifest.content_scripts) {
+                throw `ExtPay setup error: Please include ExtPay as a content script in your manifest.json. You can copy the example below into your manifest.json or check the docs: https://github.com/Glench/ExtPay#2-add-extension-permissions-to-your-manifestjson
+
+    ${content_script_template}`
+            }
+            const extpay_content_script = manifest.content_scripts.find(obj => {
+                // removing port number because firefox ignores content scripts with port number
+                return obj.matches.includes(HOST.replace(':3000', '')+'/*')
+            });
+            if (!extpay_content_script) {
+                throw `ExtPay setup error: Please include ExtPay as a content script in your manifest.json matching "${HOST}/*". You can copy the example below into your manifest.json or check the docs: https://github.com/Glench/ExtPay#2-add-extension-permissions-to-your-manifestjson
+
+    ${content_script_template}`
+            } else {
+                if (!extpay_content_script.run_at || extpay_content_script.run_at !== 'document_start') {
+                    throw `ExtPay setup error: Please make sure the ExtPay content script in your manifest.json runs at document start. You can copy the example below into your manifest.json or check the docs: https://github.com/Glench/ExtPay#2-add-extension-permissions-to-your-manifestjson
+
+    ${content_script_template}`
+                }
+            }
         }
 
         if (install_details.reason !== 'install' && !install_details.reason !== 'update') {
@@ -97,7 +127,9 @@ You can copy and paste this to your manifest.json file to fix this error:
         const api_key = await resp.json();
         await set({extensionpay_api_key: api_key});
         fetch_user();
-    });
+    }); // installed
+
+    var paid_callbacks = [];
 
     function timeout(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
@@ -110,7 +142,7 @@ You can copy and paste this to your manifest.json file to fix this error:
             await timeout(500);
             storage = await get(['extensionpay_api_key', 'extensionpay_user']);
         }
-        if (!storage.extensionpay_api_key) throw 'Error: timed out registering user.'
+        if (!storage.extensionpay_api_key) throw 'ExtPay Error: timed out registering user.'
         try {
             windows.create({
                 url: `${EXTENSION_URL}?api_key=${storage.extensionpay_api_key}`,
@@ -141,7 +173,7 @@ You can copy and paste this to your manifest.json file to fix this error:
             await timeout(500);
             storage = await get(['extensionpay_api_key', 'extensionpay_user']);
         }
-        if (!storage.extensionpay_api_key) throw 'Error: timed out registering user.'
+        if (!storage.extensionpay_api_key) throw 'ExtPay Error: timed out registering user.'
 
         const resp = await fetch(`${EXTENSION_URL}/api/user?api_key=${storage.extensionpay_api_key}`, {
             method: 'GET',
@@ -171,9 +203,18 @@ You can copy and paste this to your manifest.json file to fix this error:
     }
 
     runtime.onMessage.addListener(async function(message) {
+        console.log('debug message received in background.js!', message);
         if (message == 'fetch-user') {
-            // only called via extensionpay.com/extension/[extension-id]/paid -> content_script when user successfully paid
-            fetch_user();
+            // Only called via extensionpay.com/extension/[extension-id]/paid -> content_script when user successfully pays.
+            // It's possible attackers could trigger this but it wouldn't do anything but query.
+
+            // keep trying to fetch user in case stripe webhook is late
+            var user = await fetch_user();
+            for (var i=0; i < 60; ++i) {
+                if (user.paid) return
+                await timeout(1000);
+                user = await fetch_user();
+            }
         }
     });
     

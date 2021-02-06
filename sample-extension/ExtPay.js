@@ -1239,14 +1239,13 @@ var ExtPay = (function () {
 	if (typeof window !== 'undefined') {
 	    window.addEventListener('message', (event) => {
 	        if (event.source != window) return;
-	        console.log('window event message received!');
 	        browserPolyfill.runtime.sendMessage(event.data); // event.data === 'fetch-user'
 	    }, false);
 	}
 
 	function ExtPay(extension_id) {
 
-	    const HOST = `http://localhost:3000`;
+	    const HOST = `https://extensionpay.com`;
 	    const EXTENSION_URL = `${HOST}/extension/${extension_id}`;
 
 	    async function get(key) {

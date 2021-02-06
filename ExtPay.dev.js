@@ -10,7 +10,6 @@ import * as browser from 'webextension-polyfill';
 if (typeof window !== 'undefined') {
     window.addEventListener('message', (event) => {
         if (event.source != window) return;
-        console.log('window event message received!')
         browser.runtime.sendMessage(event.data) // event.data === 'fetch-user'
     }, false);
 }
@@ -206,7 +205,6 @@ You can copy and paste this to your manifest.json file to fix this error:
     }
 
     browser.runtime.onMessage.addListener(async function(message) {
-        console.log('debug message received in background.js!', message)
         if (message == 'fetch-user') {
             // Only called via extensionpay.com/extension/[extension-id]/paid -> content_script when user successfully pays.
             // It's possible attackers could trigger this but it wouldn't do anything but query.
