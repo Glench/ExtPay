@@ -2,6 +2,16 @@ import { runtime, management, storage, windows } from 'webextension-polyfill';
 
 // Sign up at https://extensionpay.com to use this library. AGPLv3 licensed.
 
+
+// For running as a content script. Receive a message from the successful payments page
+// and pass it on to the background page to query if the user has paid.
+if (typeof window !== 'undefined') {
+    window.addEventListener('message', (event) => {
+        if (event.source != window) return;
+        runtime.sendMessage(event.data); // event.data === 'fetch-user'
+    }, false);
+}
+
 function ExtPay(extension_id) {
 
     const HOST = `https://extensionpay.com`;
@@ -53,6 +63,10 @@ You can copy and paste this to your manifest.json file to fix this error:
     ]
  `
             }
+
+            const content_script_error = `ExtPay Setup Error: please include ExtPay.js as a content script.`;
+            console.log(content_script_error);
+            console.log('hello');
         }
 
         if (install_details.reason !== 'install' && !install_details.reason !== 'update') {
@@ -85,8 +99,18 @@ You can copy and paste this to your manifest.json file to fix this error:
         fetch_user();
     });
 
+    function timeout(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
     async function open_payment_page() {
-        const storage = await get(['extensionpay_api_key']);
+        var storage = await get(['extensionpay_api_key']);
+        // wait 10 seconds for api key to be returned if creator is running this in background.js immediately after extpay initialization
+        for (var i=0; i < 20; ++i) {
+            if (storage.extensionpay_api_key) break;
+            await timeout(500);
+            storage = await get(['extensionpay_api_key', 'extensionpay_user']);
+        }
+        if (!storage.extensionpay_api_key) throw 'Error: timed out registering user.'
         try {
             windows.create({
                 url: `${EXTENSION_URL}?api_key=${storage.extensionpay_api_key}`,
@@ -108,9 +132,6 @@ You can copy and paste this to your manifest.json file to fix this error:
         }
     }
 
-    function timeout(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-    }
 
     async function fetch_user() {
         var storage = await get(['extensionpay_api_key', 'extensionpay_user']);
@@ -120,7 +141,7 @@ You can copy and paste this to your manifest.json file to fix this error:
             await timeout(500);
             storage = await get(['extensionpay_api_key', 'extensionpay_user']);
         }
-        if (!storage.extensionpay_api_key) throw 'Error registering user.'
+        if (!storage.extensionpay_api_key) throw 'Error: timed out registering user.'
 
         const resp = await fetch(`${EXTENSION_URL}/api/user?api_key=${storage.extensionpay_api_key}`, {
             method: 'GET',
@@ -139,32 +160,35 @@ You can copy and paste this to your manifest.json file to fix this error:
             installedAt: new Date(user_data.installedAt),
         };
 
-        // TODO: implement onPaid callbacks
-        // if (parsed_user.paid) {
-        //     if (!storage.extensionpay_user || (storage.extensionpay_user && !storage.extensionpay_user.paid)) {
-        //         paid_callbacks.forEach(cb => cb(user))
-        //     }
-        // }
+        if (parsed_user.paid) {
+            if (!storage.extensionpay_user || (storage.extensionpay_user && !storage.extensionpay_user.paid)) {
+                paid_callbacks.forEach(cb => cb(parsed_user));
+            }
+        }
         await set({extensionpay_user: user_data}); // useful for future purposes perhaps
 
         return parsed_user;
     }
 
-    // browser.runtime.onMessage.addListener(async function(message) {
-    //     if (message == 'query-user') {
-    //         // only called via extensionpay.com/extension/<>/paid -> content_script when user successfully paid
-    //         fetch_user()
-    //     }
-    //
-    // });
+    runtime.onMessage.addListener(async function(message) {
+        if (message == 'fetch-user') {
+            // only called via extensionpay.com/extension/[extension-id]/paid -> content_script when user successfully paid
+            fetch_user();
+        }
+    });
     
     return {
         getUser: function() {
             return fetch_user()
         },
-        // onPaid: function(callback) {
-        //     paid_callbacks.push(callback)
-        // },
+        onPaid: {
+            addListener: function(callback) {
+                paid_callbacks.push(callback);
+            },
+            // removeListener: function(callback) {
+            //     // TODO
+            // }
+        },
         openPaymentPage: open_payment_page,
         // paymentPageLink: function() {
         //     return new Promise((resolve, reject) => {

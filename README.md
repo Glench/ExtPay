@@ -1,10 +1,11 @@
-# ExtPay — Payments for browser extensions
-The JavaScript library for [ExtensionPay.com](https://extensionpay.com), a service to easily add payments to browser extensions. It uses [webextension-polyfill](https://github.com/mozilla/webextension-polyfill) internally for compatability across browsers. 
+# ExtPay — Payments in browser extensions
+The JavaScript library for [ExtensionPay.com](https://extensionpay.com), a service to easily add payments to browser extensions without needing to run your own server backend.
 
 Below are the directions for using this library in your browser extension. If you learn better by example, you can also view the sample extension:
 
 #### [Sample Extension Code](sample-extension/)
 
+This library uses [webextension-polyfill](https://github.com/mozilla/webextension-polyfill) internally for compatability across browsers. 
 ### 1. Install
 
 Copy the [dist/ExtPay.js](dist/ExtPay.js) file into your project, or, if you're using a bundler (like Webpack or Rollup):
@@ -14,25 +15,34 @@ npm install extpay --save
 ```
 
 
-### 2. Add extension permissions to your `manifest.json`
-ExtPay needs the following permissions in your `manifest.json`:
+### 2. Configure your `manifest.json`
+ExtPay needs the following configuration in your `manifest.json`:
 ```json
 {
     "manifest_version": 2,
+    "content_scripts": [
+        {
+            "matches": ["https://extensionpay.com/*"],
+            "js": ["ExtPay.js"],
+            "run_at": "document_start"
+        }
+    ],
     "permissions": [
         "https://extensionpay.com/*",
         "storage"
     ]
 }
 ```
-Right now the library doesn't support adding these as optional permissions but may in the future.
+The content script is required to enable `extpay.onPaid` callbacks (see below). If you're using a bundler, you can create a file called something like `ExtPay_content_script.js` that only contains `import 'ExtPay'` or `require('ExtPay')` and use that instead of `ExtPay.js` in the `"js"` field of the manifest shown above.
+
+Also please note: the library doesn't currently support optional permissions but may in the future.
 
 
-### 3. Add ExtPay to background.js (important!)
+### 3. Add `ExtPay` to `background.js` (important!)
 
-You need to put a call to ExtPay in a background file, often named something like `background.js`.
+You need to put `ExtPay` in your background file, often named something like `background.js`. If you don't include `ExtPay` in your background file it won't work correctly.
 
-First, add `ExtPay.js` to `manifest.json` if you're not using a bundler:
+If you're not using a bundler, add `ExtPay.js` to `manifest.json`:
 ```js
 {
     "background": {
@@ -41,14 +51,15 @@ First, add `ExtPay.js` to `manifest.json` if you're not using a bundler:
 }
 ```
 
-Then initialize ExtPay with your extension `short-id`, which you need to get by **[signing up and registering an extension](https://extensionpay.com)**. In the example below, the `short-id` is `sample-extension`.
+Then initialize ExtPay with your extension's unique `extension-id`, which you get by **[signing up and registering an extension](https://extensionpay.com)**. In the example below, the `extension-id` is `sample-extension`.
 
 ```js
 // background.js
 const extpay = ExtPay('sample-extension')
 ```
 
-(Using a bundler? You can `import` or `require` `ExtPay`.)
+If you're using a bundler you can `import 'ExtPay'` or `require('ExtPay')` right in your `background.js`.)
+
 
 ### 4. Use `extpay.getUser()` to check user's paid status
 
@@ -75,6 +86,7 @@ The `user` object has the following properties:
 
 
 ### 5. Use `extpay.openPaymentPage()` to let the user pay
+
 Opens a browser popup where the user can pay for the extension. You can bind this to a button.
 ```js
 extpay.openPaymentPage()
@@ -83,4 +95,17 @@ The payment page looks like this:
 
 ![popup screenshot](popup_screenshot.png)
 
-While testing, use your ExtensionPay email to test payments without entering credit card information. Reinstall the extension to reset back to an unpaid user.
+While testing, use your ExtensionPay email to test payments without needing to enter credit card information. Reinstall the extension to reset back to an unpaid user.
+
+
+### 6. Use `extpay.onPaid.addListener()` to run code when the user pays
+
+If you want to run some code when your user pays, use `extpay.onPaid.addListener()`:
+
+```js
+extpay.onPaid.addListener(user => {
+    console.log('user paid!')
+})
+```
+
+You can add as many callback functions as you want.

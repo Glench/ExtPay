@@ -40,19 +40,21 @@ export default [
             replace({
                 'http://localhost:3000': 'https://extensionpay.com'
             }),
-        ]
+        ],
+        external: ['webextension-polyfill']
     },
     {
         input,
         output: {
             file: 'dist/ExtPay.module.js',
-            format: 'es'
+            format: 'es',
         },
         plugins: [
             replace({
                 'http://localhost:3000': 'https://extensionpay.com'
             }),
-        ]
+        ],
+        external: ['webextension-polyfill']
     }
 ]
 

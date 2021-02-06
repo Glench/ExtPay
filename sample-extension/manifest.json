@@ -8,11 +8,18 @@
     "background": {
         "scripts": ["ExtPay.js", "background.js"]
     },
+    "content_scripts": [
+        {
+            "matches": ["http://localhost:3000/*"],
+            "js": ["ExtPay.js"],
+            "run_at": "document_start"
+        }
+    ],
     "browser_action": {
         "default_popup": "popup.html"
     },
     "permissions": [
-        "https://extensionpay.com/*",
+        "http://localhost:3000/*",
         "storage"
     ]
 }
