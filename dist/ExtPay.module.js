@@ -203,7 +203,6 @@ You can copy and paste this to your manifest.json file to fix this error:
     }
 
     runtime.onMessage.addListener(async function(message) {
-        console.log('debug message received in background.js!', message);
         if (message == 'fetch-user') {
             // Only called via extensionpay.com/extension/[extension-id]/paid -> content_script when user successfully pays.
             // It's possible attackers could trigger this but it wouldn't do anything but query.
