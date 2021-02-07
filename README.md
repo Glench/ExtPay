@@ -58,7 +58,7 @@ Then initialize ExtPay with your extension's unique `extension-id`, which you ge
 const extpay = ExtPay('sample-extension')
 ```
 
-If you're using a bundler you can `import 'ExtPay'` or `require('ExtPay')` right in your `background.js`.)
+If you're using a bundler you can `import 'ExtPay'` or `require('ExtPay')` right in your `background.js`.
 
 
 ### 4. Use `extpay.getUser()` to check user's paid status
@@ -66,19 +66,20 @@ If you're using a bundler you can `import 'ExtPay'` or `require('ExtPay')` right
 This method makes a network call to get the extension user's paid status and returns a `user` object.
 ```js
 extpay.getUser().then(user => {
-    // if (user.paid) ...
-}).catch(err => {
-    // do something if there's an error, probably from the network call
-})    
+    if (user.paid) // ...
+    else // ...
+})
 ```
 or use `await`:
 ```js
 async function foo() {
     const user = await extpay.getUser();
-    // if (user.paid) ...
+    if (user.paid) // ...
 }
 ```
-The `user` object has the following properties:
+It is possible for `extpay.getUser()` to throw an error in case of a network failure. Please consider this possibility in your code.
+
+The `user` object returned from `extpay.getUser()` has the following properties:
 
 * `user.paid` - boolean `true` or `false`.
 * `user.paidAt` - JS `Date()` object that the user paid or `null`.
