@@ -111,4 +111,4 @@ extpay.onPaid.addListener(user => {
 
 You can add as many callback functions as you want.
 
-Note: `onPaid` callbacks will be called after a user pays as well as after a user "logs in" (e.g. activates their paid account on a different browser). This may change in the future. If you'd like this to work differently, please contact me with a detailed explanation of your use case :)
+Note: `onPaid` callbacks will be called after a user pays as well as after a user "logs in" (e.g. activates their paid account on a different browser/profile/install). This may change in the future. If you'd like this to work differently, please contact me with a detailed explanation of your use case :)
