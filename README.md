@@ -1,11 +1,10 @@
 # ExtPay — Payments in browser extensions
 The JavaScript library for [ExtensionPay.com](https://extensionpay.com), a service to easily add payments to browser extensions without needing to run your own server backend.
 
-Below are the directions for using this library in your browser extension. If you learn better by example, you can also view the sample extension:
+Below are the directions for using this library in your browser extension. If you learn better by example, you can also view a **[sample extension's code](sample-extension/)**. This library uses [Mozilla's webextension-polyfill library](https://github.com/mozilla/webextension-polyfill) internally for compatability across browsers which means it should work on pretty much all modern browsers.
 
-#### [Sample Extension Code](sample-extension/)
+Note: It should go without saying but I'll say it anyway: ExtPay does not contain malware or track your users in any way. The library only communicates with ExtensionPay.com servers to manage users' paid status.
 
-This library uses [webextension-polyfill](https://github.com/mozilla/webextension-polyfill) internally for compatability across browsers. 
 ### 1. Install
 
 Copy the [dist/ExtPay.js](dist/ExtPay.js) file into your project, or, if you're using a bundler (like Webpack or Rollup):
