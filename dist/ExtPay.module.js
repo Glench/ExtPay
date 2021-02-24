@@ -78,7 +78,7 @@ You can copy and paste this to your manifest.json file to fix this error:
             }
             const manifest = await manifest_resp.json();
             if (!manifest.content_scripts) {
-                throw `ExtPay setup error: Please include ExtPay as a content script in your manifest.json. You can copy the example below into your manifest.json or check the docs: https://github.com/Glench/ExtPay#2-add-extension-permissions-to-your-manifestjson
+                throw `ExtPay setup error: Please include ExtPay as a content script in your manifest.json. You can copy the example below into your manifest.json or check the docs: https://github.com/Glench/ExtPay#2-configure-your-manifestjson
 
     ${content_script_template}`
             }
