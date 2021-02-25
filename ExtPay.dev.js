@@ -101,7 +101,7 @@ You can copy and paste this to your manifest.json file to fix this error:
             }
         }
 
-        if (install_details.reason !== 'install' && !install_details.reason !== 'update') {
+        if (install_details.reason !== 'install' && install_details.reason !== 'update') {
             return
         }
 
