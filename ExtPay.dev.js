@@ -36,7 +36,7 @@ export default function ExtPay(extension_id) {
         }
     }
 
-    browser.runtime.onInstalled.addListener(async function(install_details) {
+    browser.runtime.onInstalled && browser.runtime.onInstalled.addListener(async function(install_details) {
         
         const ext_info = await browser.management.getSelf()
         if (ext_info.installType == 'development') {

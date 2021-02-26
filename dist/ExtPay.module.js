@@ -34,7 +34,7 @@ function ExtPay(extension_id) {
         }
     }
 
-    runtime.onInstalled.addListener(async function(install_details) {
+    runtime.onInstalled && runtime.onInstalled.addListener(async function(install_details) {
         
         const ext_info = await management.getSelf();
         if (ext_info.installType == 'development') {

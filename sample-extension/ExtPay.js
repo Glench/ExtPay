@@ -1265,7 +1265,7 @@ var ExtPay = (function () {
 	        }
 	    }
 
-	    browserPolyfill.runtime.onInstalled.addListener(async function(install_details) {
+	    browserPolyfill.runtime.onInstalled && browserPolyfill.runtime.onInstalled.addListener(async function(install_details) {
 	        
 	        const ext_info = await browserPolyfill.management.getSelf();
 	        if (ext_info.installType == 'development') {
