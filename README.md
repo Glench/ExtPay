@@ -34,7 +34,9 @@ ExtPay needs the following configuration in your `manifest.json`:
 ```
 The content script is required to enable `extpay.onPaid` callbacks (see below). If you're using a bundler, you can create a file called something like `ExtPay_content_script.js` that only contains `import 'ExtPay'` or `require('ExtPay')` and use that in the `"js"` field above.
 
-Also please note: the library doesn't currently support optional permissions but may in the future.
+If you have a `"content_security_policy"` in your manifest or get a `Refused to connect to 'https://extensionpay.com...'` error, you'll may have to add `connect-src https://extensionpay.com` to your extension's content security policy. <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/content_security_policy">See the Mozilla documentation for more details</a>.
+
+Also please note: ExtPay doesn't currently support optional permissions but may in the future.
 
 
 ### 3. Add `ExtPay` to `background.js` (required!)
