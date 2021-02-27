@@ -143,24 +143,29 @@ You can copy and paste this to your manifest.json file to fix this error:
             storage = await get(['extensionpay_api_key', 'extensionpay_user']);
         }
         if (!storage.extensionpay_api_key) throw 'ExtPay Error: timed out registering user.'
-        try {
-            windows.create({
-                url: `${EXTENSION_URL}?api_key=${storage.extensionpay_api_key}`,
-                type: "popup",
-                focused: true,
-                width: 500,
-                height: 800,
-                left: 450
-            });
-        } catch(e) {
-            // firefox doesn't support 'focused'
-            windows.create({
-                url: `${EXTENSION_URL}?api_key=${storage.extensionpay_api_key}`,
-                type: "popup",
-                width: 500,
-                height: 800,
-                left: 450
-            });
+        if (windows) {
+            try {
+                windows.create({
+                    url: `${EXTENSION_URL}?api_key=${storage.extensionpay_api_key}`,
+                    type: "popup",
+                    focused: true,
+                    width: 500,
+                    height: 800,
+                    left: 450
+                });
+            } catch(e) {
+                // firefox doesn't support 'focused'
+                windows.create({
+                    url: `${EXTENSION_URL}?api_key=${storage.extensionpay_api_key}`,
+                    type: "popup",
+                    width: 500,
+                    height: 800,
+                    left: 450
+                });
+            }
+        } else {
+            // https://developer.mozilla.org/en-US/docs/Web/API/Window/open
+            window.open(`${EXTENSION_URL}?api_key=${storage.extensionpay_api_key}`, null, "toolbar=no,location=no,directories=no,status=no,menubar=no,width=500,height=800,left=450");
         }
     }
 
