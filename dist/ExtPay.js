@@ -1290,7 +1290,7 @@ You can copy and paste this to your manifest.json file to fix this error:
 You can copy and paste this to your manifest.json file to fix this error:
 
 "permissions": [
-    ${permissions.map(x => `"${x}"`).join(',\n')}${permissions.length > 0 ? ',' : ''}
+    ${permissions.map(x => `"    ${x}"`).join(',\n')}${permissions.length > 0 ? ',' : ''}
     "storage"
 ]
 `
@@ -1340,8 +1340,16 @@ ${content_script_template}`
 	    var paid_callbacks = [];
 
 	    async function create_key() {
-	        const ext_info = await browserPolyfill.management.getSelf();
 	        var body = {};
+	        var ext_info;
+	        if (browserPolyfill.management) {
+	            ext_info = await browserPolyfill.management.getSelf();
+	        } else if (browserPolyfill.runtime) {
+	            ext_info = await browserPolyfill.runtime.sendMessage('extpay-extinfo'); // ask background page for ext info
+	        } else {
+	            throw 'ExtPay needs to be run in a browser extension context'
+	        }
+
 	        if (ext_info.installType == 'development') {
 	            body.development = true;
 	        } 
@@ -1445,18 +1453,24 @@ ${content_script_template}`
 	        }
 	    }
 
-	    browserPolyfill.runtime.onMessage.addListener(async function(message) {
+	    async function poll_user() {
+	        // keep trying to fetch user in case stripe webhook is late
+	        var user = await fetch_user();
+	        for (var i=0; i < 2*60; ++i) {
+	            if (user.paidAt) return user;
+	            await timeout(1000);
+	            user = await fetch_user();
+	        }
+	    }
+
+	    browserPolyfill.runtime.onMessage.addListener(function(message, sender, send_response) {
 	        if (message == 'fetch-user') {
 	            // Only called via extensionpay.com/extension/[extension-id]/paid -> content_script when user successfully pays.
 	            // It's possible attackers could trigger this but that is basically harmless. It would just query the user.
-
-	            // keep trying to fetch user in case stripe webhook is late
-	            var user = await fetch_user();
-	            for (var i=0; i < 2*60; ++i) {
-	                if (user.paidAt) return
-	                await timeout(1000);
-	                user = await fetch_user();
-	            }
+	            poll_user();
+	        } else if (message == 'extpay-extinfo' && browserPolyfill.management) {
+	            // get this message from content scripts which can't access browser.management
+	            return browserPolyfill.management.getSelf()
 	        }
 	    });
 	    
