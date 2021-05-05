@@ -19,7 +19,6 @@
         "default_popup": "popup.html"
     },
     "permissions": [
-        "https://extensionpay.com/*",
         "storage"
     ]
 }

@@ -24,7 +24,7 @@ npm install extpay --save
 
 
 ## 2. Configure your `manifest.json`
-ExtPay needs the following configuration in your `manifest.json`:
+ExtPay needs the following configuration in your V2 `manifest.json`:
 ```json
 {
     "manifest_version": 2,
@@ -36,16 +36,18 @@ ExtPay needs the following configuration in your `manifest.json`:
         }
     ],
     "permissions": [
-        "https://extensionpay.com/*",
         "storage"
     ]
 }
 ```
+
+ExtPay will not show a scary permission warning when your users try to install your extension.
+
 The content script is required to enable `extpay.onPaid` callbacks (see below). If you're using a bundler, you can create a file called something like `ExtPay_content_script.js` that only contains `import 'ExtPay'` or `require('ExtPay')` and use that in the `"js"` field above.
 
 If you have a `"content_security_policy"` in your manifest or get a `Refused to connect to 'https://extensionpay.com...'` error, you'll have to add `connect-src https://extensionpay.com` to your extension's content security policy. <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/content_security_policy">See Mozilla's documentation for more details</a>.
 
-Also please note: ExtPay doesn't currently support optional permissions but may in the future.
+Manifest V3 support coming soon.
 
 
 ## 3. Add `ExtPay` to `background.js` (required!)

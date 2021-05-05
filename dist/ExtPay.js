@@ -1270,19 +1270,6 @@ var ExtPay = (function () {
 
 	    // ----- start configuration checks
 	    browserPolyfill.management && browserPolyfill.management.getSelf().then(async (ext_info) => {
-	        if (!ext_info.hostPermissions.includes(HOST+'/*')) {
-	            var permissions = ext_info.permissions.concat(ext_info.hostPermissions);
-	            throw `ExtPay Setup Error: please include "${HOST}/*" in manifest.json["permissions"] or else ExtensionPay won't work correctly.
-
-You can copy and paste this to your manifest.json file to fix this error:
-
-"permissions": [
-    ${permissions.map(x => `"${x}"`).join(',\n        ')}${permissions.length > 0 ? ',' : ''}
-    "${HOST}/*"
-]
-`
-	        }
-
 	        if (!ext_info.permissions.includes('storage')) {
 	            var permissions = ext_info.hostPermissions.concat(ext_info.permissions);
 	            throw `ExtPay Setup Error: please include the "storage" permission in manifest.json["permissions"] or else ExtensionPay won't work correctly.
@@ -1422,15 +1409,20 @@ ${content_script_template}`
 	        return parsed_user;
 	    }
 
-	    async function open_payment_page() {
+	    async function payment_page_link() {
 	        var api_key = await get_key();
 	        if (!api_key) {
 	            api_key = await create_key();
 	        }
+	        return `${EXTENSION_URL}?api_key=${api_key}`
+	    }
+
+	    async function open_payment_page() {
+	        const url = await payment_page_link();
 	        if (browserPolyfill.windows) {
 	            try {
 	                browserPolyfill.windows.create({
-	                    url: `${EXTENSION_URL}?api_key=${api_key}`,
+	                    url: url,
 	                    type: "popup",
 	                    focused: true,
 	                    width: 500,
@@ -1440,7 +1432,7 @@ ${content_script_template}`
 	            } catch(e) {
 	                // firefox doesn't support 'focused'
 	                browserPolyfill.windows.create({
-	                    url: `${EXTENSION_URL}?api_key=${api_key}`,
+	                    url: url,
 	                    type: "popup",
 	                    width: 500,
 	                    height: 800,
@@ -1449,9 +1441,10 @@ ${content_script_template}`
 	            }
 	        } else {
 	            // https://developer.mozilla.org/en-US/docs/Web/API/Window/open
-	            window.open(`${EXTENSION_URL}?api_key=${api_key}`, null, "toolbar=no,location=no,directories=no,status=no,menubar=no,width=500,height=800,left=450");
+	            window.open(url, null, "toolbar=no,location=no,directories=no,status=no,menubar=no,width=500,height=800,left=450");
 	        }
 	    }
+
 
 	    async function poll_user() {
 	        // keep trying to fetch user in case stripe webhook is late
