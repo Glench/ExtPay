@@ -41,7 +41,7 @@ ExtPay needs the following configuration in your V2 `manifest.json`:
 }
 ```
 
-ExtPay will not show a scary permission warning when your users try to install your extension.
+ExtPay will not show a scary permission warning when users try to install your extension.
 
 The content script is required to enable `extpay.onPaid` callbacks (see below). If you're using a bundler, you can create a file called something like `ExtPay_content_script.js` that only contains `import 'ExtPay'` or `require('ExtPay')` and use that in the `"js"` field above.
 
