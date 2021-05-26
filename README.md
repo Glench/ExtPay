@@ -28,13 +28,6 @@ ExtPay needs the following configuration in your V2 `manifest.json`:
 ```json
 {
     "manifest_version": 2,
-    "content_scripts": [
-        {
-            "matches": ["https://extensionpay.com/*"],
-            "js": ["ExtPay.js"],
-            "run_at": "document_start"
-        }
-    ],
     "permissions": [
         "storage"
     ]
@@ -42,8 +35,6 @@ ExtPay needs the following configuration in your V2 `manifest.json`:
 ```
 
 ExtPay will not show a scary permission warning when users try to install your extension.
-
-The content script is required to enable `extpay.onPaid` callbacks (see below). If you're using a bundler, you can create a file called something like `ExtPay_content_script.js` that only contains `import 'ExtPay'` or `require('ExtPay')` and use that in the `"js"` field above.
 
 If you have a `"content_security_policy"` in your manifest or get a `Refused to connect to 'https://extensionpay.com...'` error, you'll have to add `connect-src https://extensionpay.com` to your extension's content security policy. <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/content_security_policy">See Mozilla's documentation for more details</a>.
 
@@ -137,9 +128,26 @@ extpay.onPaid.addListener(user => {
 })
 ```
 
+To use this feature, you will need to include the following content script configuration in your `manifest.json`:
+
+```json
+{
+    "manifest_version": 2,
+    "content_scripts": [
+        {
+            "matches": ["https://extensionpay.com/*"],
+            "js": ["ExtPay.js"],
+            "run_at": "document_start"
+        }
+    ]
+}
+```
+
+The content script is required to enable `extpay.onPaid` callbacks. It will add a permissions warning when installing your extension. If you're using a bundler, you can create a file called something like `ExtPay_content_script.js` that only contains `import 'ExtPay'` or `require('ExtPay')` and use that in the `"js"` field above.
+
 You can add as many callback functions as you want.
 
-Note: `onPaid` callbacks will be called after a user pays as well as after a user "logs in" (e.g. activates their paid account on a different browser/profile/install). This may change in the future. If you'd like this to work differently, please contact me with a detailed explanation of your use case :)
+Note: `onPaid` callbacks will be called after a user pays as well as after a user "logs in" (e.g. activates their paid account on a different browser/profile/install). This may change in the future -- if you'd like this to work differently, please contact me with a detailed explanation of your use case :)
 
 
 ## 7. Use `extpay.openPaymentPage()` to let the user manage their subscription preferences

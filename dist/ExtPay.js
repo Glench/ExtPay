@@ -1283,33 +1283,6 @@ You can copy and paste this to your manifest.json file to fix this error:
 `
 	        }
 
-	        const content_script_template = `"content_scripts": [
-        {
-    "matches": ["${HOST}/*"],
-    "js": ["ExtPay.js"],
-    "run_at": "document_start"
-}]`;
-	        const manifest = browserPolyfill.runtime.getManifest();
-	        if (!manifest.content_scripts) {
-	            throw `ExtPay setup error: Please include ExtPay as a content script in your manifest.json. You can copy the example below into your manifest.json or check the docs: https://github.com/Glench/ExtPay#2-configure-your-manifestjson
-
-${content_script_template}`
-	        }
-	        const extpay_content_script_entry = manifest.content_scripts.find(obj => {
-	            // removing port number because firefox ignores content scripts with port number
-	            return obj.matches.includes(HOST.replace(':3000', '')+'/*')
-	        });
-	        if (!extpay_content_script_entry) {
-	            throw `ExtPay setup error: Please include ExtPay as a content script in your manifest.json matching "${HOST}/*". You can copy the example below into your manifest.json or check the docs: https://github.com/Glench/ExtPay#2-configure-your-manifestjson
-
-${content_script_template}`
-	        } else {
-	            if (!extpay_content_script_entry.run_at || extpay_content_script_entry.run_at !== 'document_start') {
-	                throw `ExtPay setup error: Please make sure the ExtPay content script in your manifest.json runs at document start. You can copy the example below into your manifest.json or check the docs: https://github.com/Glench/ExtPay#2-configure-your-manifestjson
-
-${content_script_template}`
-	            }
-	        }
 	    });
 	    // ----- end configuration checks
 
@@ -1473,6 +1446,34 @@ ${content_script_template}`
 	        },
 	        onPaid: {
 	            addListener: function(callback) {
+	                const content_script_template = `"content_scripts": [
+                {
+            "matches": ["${HOST}/*"],
+            "js": ["ExtPay.js"],
+            "run_at": "document_start"
+        }]`;
+	                const manifest = browserPolyfill.runtime.getManifest();
+	                if (!manifest.content_scripts) {
+	                    throw `ExtPay setup error: To use the onPaid callback handler, please include ExtPay as a content script in your manifest.json. You can copy the example below into your manifest.json or check the docs: https://github.com/Glench/ExtPay#2-configure-your-manifestjson
+
+        ${content_script_template}`
+	                }
+	                const extpay_content_script_entry = manifest.content_scripts.find(obj => {
+	                    // removing port number because firefox ignores content scripts with port number
+	                    return obj.matches.includes(HOST.replace(':3000', '')+'/*')
+	                });
+	                if (!extpay_content_script_entry) {
+	                    throw `ExtPay setup error: To use the onPaid callback handler, please include ExtPay as a content script in your manifest.json matching "${HOST}/*". You can copy the example below into your manifest.json or check the docs: https://github.com/Glench/ExtPay#2-configure-your-manifestjson
+
+        ${content_script_template}`
+	                } else {
+	                    if (!extpay_content_script_entry.run_at || extpay_content_script_entry.run_at !== 'document_start') {
+	                        throw `ExtPay setup error: To use the onPaid callback handler, please make sure the ExtPay content script in your manifest.json runs at document start. You can copy the example below into your manifest.json or check the docs: https://github.com/Glench/ExtPay#2-configure-your-manifestjson
+
+        ${content_script_template}`
+	                    }
+	                }
+
 	                paid_callbacks.push(callback);
 	            },
 	            // removeListener: function(callback) {
