@@ -160,4 +160,4 @@ extpay.openPaymentPage()
 
 The subscription management page looks something like this:
 
-<img src="docs/subscription_management_screenshot.png" alt="Screenshot of example subscription management page." width="400">
+<img src="docs/subscription_management_screenshot.png" alt="Screenshot of example subscription management page." width="400"> 
