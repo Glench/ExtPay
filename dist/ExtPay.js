@@ -1238,8 +1238,11 @@ var ExtPay = (function () {
 	// and pass it on to the background page to query if the user has paid.
 	if (typeof window !== 'undefined') {
 	    window.addEventListener('message', (event) => {
+	        if (event.origin !== 'https://extensionpay.com') return;
 	        if (event.source != window) return;
-	        browserPolyfill.runtime.sendMessage(event.data); // event.data === 'fetch-user'
+	        if (event.data === 'fetch-user') {
+	            browserPolyfill.runtime.sendMessage(event.data);
+	        }
 	    }, false);
 	}
 
@@ -1419,14 +1422,21 @@ You can copy and paste this to your manifest.json file to fix this error:
 	    }
 
 
+	    var polling = false;
 	    async function poll_user() {
 	        // keep trying to fetch user in case stripe webhook is late
+	        if (polling) return;
+	        polling = true;
 	        var user = await fetch_user();
 	        for (var i=0; i < 2*60; ++i) {
-	            if (user.paidAt) return user;
+	            if (user.paidAt) {
+	                polling = false;
+	                return user;
+	            }
 	            await timeout(1000);
 	            user = await fetch_user();
 	        }
+	        polling = false;
 	    }
 
 	    browserPolyfill.runtime.onMessage.addListener(function(message, sender, send_response) {
