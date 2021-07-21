@@ -11,7 +11,7 @@ if (typeof window !== 'undefined') {
     window.addEventListener('message', (event) => {
         if (event.origin !== 'https://extensionpay.com') return;
         if (event.source != window) return;
-        if (event.data === 'fetch-user') {
+        if (event.data === 'fetch-user' || event.data === 'trial-start') {
             browser.runtime.sendMessage(event.data);
         }
     }, false);
@@ -71,7 +71,8 @@ You can copy and paste this to your manifest.json file to fix this error:
         await set({'extensionpay_installed_at': date});
     });
 
-    var paid_callbacks = [];
+    const paid_callbacks = [];
+    const trial_callbacks =  [];
 
     async function create_key() {
         var body = {};
@@ -139,7 +140,7 @@ You can copy and paste this to your manifest.json file to fix this error:
         const parsed_user = {};
         for (var [key, value] of Object.entries(user_data)) {
             if (value && value.match && value.match(datetime_re)) {
-                value = new Date();
+                value = new Date(value);
             }
             parsed_user[key] = value;
         }
@@ -150,6 +151,12 @@ You can copy and paste this to your manifest.json file to fix this error:
             if (!storage.extensionpay_user || (storage.extensionpay_user && !storage.extensionpay_user.paidAt)) {
                 paid_callbacks.forEach(cb => cb(parsed_user));
             }
+        }
+        if (parsed_user.trialStartedAt) {
+            if (!storage.extensionpay_user || (storage.extensionpay_user && !storage.extensionpay_user.trialStartedAt)) {
+                trial_callbacks.forEach(cb => cb(parsed_user));
+            }
+
         }
         await set({extensionpay_user: user_data});
 
@@ -192,9 +199,49 @@ You can copy and paste this to your manifest.json file to fix this error:
         }
     }
 
+    async function open_trial_page(period) {
+        // let user have period string like '1 week' e.g. "start your 1 week free trial"
+
+        var api_key = await get_key();
+        if (!api_key) {
+            api_key = await create_key();
+        }
+        var url = `${EXTENSION_URL}/trial?api_key=${api_key}`;
+        if (period) {
+            url += `&period=${period}`;
+        }
+
+        if (browser.windows) {
+            try {
+                browser.windows.create({
+                    url,
+                    type: "popup",
+                    focused: true,
+                    width: 500,
+                    height: 650,
+                    left: 450
+                });
+            } catch(e) {
+                // firefox doesn't support 'focused'
+                browser.windows.create({
+                    url,
+                    type: "popup",
+                    width: 500,
+                    height: 650,
+                    left: 450
+                });
+            }
+        } else {
+            // https://developer.mozilla.org/en-US/docs/Web/API/Window/open
+            // for opening from a content script
+            window.open(url, null, "toolbar=no,location=no,directories=no,status=no,menubar=no,width=500,height=800,left=450");
+        }
+    
+    }
+
 
     var polling = false;
-    async function poll_user() {
+    async function poll_user_paid() {
         // keep trying to fetch user in case stripe webhook is late
         if (polling) return;
         polling = true;
@@ -214,7 +261,10 @@ You can copy and paste this to your manifest.json file to fix this error:
         if (message == 'fetch-user') {
             // Only called via extensionpay.com/extension/[extension-id]/paid -> content_script when user successfully pays.
             // It's possible attackers could trigger this but that is basically harmless. It would just query the user.
-            poll_user();
+            poll_user_paid();
+        } else if (message == 'trial-start') {
+            // no need to poll since the trial confirmation page has already set trialStartedAt
+            fetch_user(); 
         } else if (message == 'extpay-extinfo' && browser.management) {
             // get this message from content scripts which can't access browser.management
             return browser.management.getSelf()
@@ -262,6 +312,12 @@ You can copy and paste this to your manifest.json file to fix this error:
             // }
         },
         openPaymentPage: open_payment_page,
+        openTrialPage: open_trial_page,
+        onTrialStarted: {
+            addListener: function(callback) {
+                trial_callbacks.push(callback);
+            }
+        },
         // paymentPageLink: function() {
         //     return new Promise((resolve, reject) => {
         //         browser.storage.sync.get(['extensionpay_api_key'], function(storage) {

@@ -11,6 +11,7 @@ Below are directions for using this library in your browser extension. If you le
   5. [Use `extpay.openPaymentPage()` to let the user pay](#5-use-extpayopenpaymentpage-to-let-the-user-pay)
   6. [Use `extpay.onPaid.addListener()` to run code when the user pays](#6-use-extpayonpaidaddlistener-to-run-code-when-the-user-pays)
   7. [Use `extpay.openPaymentPage()` to let the user manage their subscription preferences](#7-use-extpayopenpaymentpage-to-let-the-user-manage-their-subscription-preferences)
+  8. [Use `extpay.openTrialPage()` to let the user sign up for a free trial](#8-use-extpayopentrialpage-to-let-the-user-sign-up-for-a-free-trial)
 
 **Note**: ExtPay.js doesn't contain malware or track your users in any way. This library only communicates with ExtensionPay.com servers to manage users' paid status.
 
@@ -95,6 +96,7 @@ The `user` object returned from `extpay.getUser()` has the following properties:
 | `user.paid` | `true` or `false`. `user.paid` is meant to be a simple way to tell if the user should have paid features activated. For subscription payments, `paid` is only true if `subscriptionStatus` is `active`. |
 | `user.paidAt` | `Date()` object that the user first paid or `null`.|
 | `user.installedAt` | `Date()` object the user installed the extension. |
+| `user.trialStartedAt` | `null` or `Date()` object the user confirmed their free trial. |
 | **subscription only**| |
 | `user.subscriptionStatus` | One of `active`, `past_due`, or `canceled`. `active` means the user's subscription is paid-for. `past_due` means the user's most recent subscription payment has failed (expired card, insufficient funds, etc). `canceled` means that the user has canceled their subscription and the end of their last paid period has passed. [You can read more about how subscriptions work here](/docs/how_subscriptions_work.md). |
 | `user.subscriptionCancelAt` | `null` or `Date()` object that the user's subscription is set to cancel or did cancel at. |
@@ -161,3 +163,44 @@ extpay.openPaymentPage()
 The subscription management page looks something like this:
 
 <img src="docs/subscription_management_screenshot.png" alt="Screenshot of example subscription management page." width="400"> 
+
+
+## 8. Use `extpay.openTrialPage()` to let the user sign up for a free trial
+
+If you want to give your users a trial period of your extension, you can use `extpay.openTrialPage()`, which looks something like this:
+
+<img src="docs/trial_page_screenshot.png" alt="Screenshot of trial page" width="400"> 
+
+The user will be sent an email with a link that they can use to start their free trial. Once the user clicks the link, you can use the `trialStartedAt` property from `extpay.getUser()` in your extension to check if the trial has expired.
+
+For example, if you wanted a 7 day trial period, you could use a check like this:
+
+```js
+const extpay = ExtPay('sample-extension');
+extpay.getUser().then(user => {
+    const now = new Date();
+    const sevenDays = 1000*60*60*24*7 // in milliseconds
+    if (user.trialStartedAt && (now - user.trialStartedAt) < sevenDays) {
+        // user's trial is active
+    } else {
+        // user's trial is not active
+    }
+})
+```
+
+Note that `extpay.openTrialPage(displayText)` takes an optional string argument that is displayed to the user on the trial page. For example, `extpay.openTrialPage('7-day')` would change the trial prompt from `Enter an email to start your free trial` to `Enter an email to start your *7-day* free trial`. This is meant to give your users a better idea of what they're signing up for.
+
+You can also use `extpay.onTrialStarted.addListener()` to run functions when the user's trial starts. Like `onPaid`, you need to include the following in your `manifest.json` to make it work:
+
+```json
+{
+    "manifest_version": 2,
+    "content_scripts": [
+        {
+            "matches": ["https://extensionpay.com/*"],
+            "js": ["ExtPay.js"],
+            "run_at": "document_start"
+        }
+    ]
+}
+```
