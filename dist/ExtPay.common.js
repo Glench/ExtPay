@@ -122,7 +122,8 @@ You can copy and paste this to your manifest.json file to fix this error:
             return {
                 paid: false,
                 paidAt: null,
-                installedAt: new Date(storage.extensionpay_installed_at),
+                installedAt: storage.extensionpay_installed_at ? new Date(storage.extensionpay_installed_at) : new Date(), // sometimes this function gets called before the initial install time can be flushed to storage
+                trialStartedAt: null,
             }
         }
 
