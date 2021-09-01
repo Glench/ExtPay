@@ -258,19 +258,7 @@ You can copy and paste this to your manifest.json file to fix this error:
         polling = false;
     }
 
-    browser.runtime.onMessage.addListener(function(message, sender, send_response) {
-        if (message == 'fetch-user') {
-            // Only called via extensionpay.com/extension/[extension-id]/paid -> content_script when user successfully pays.
-            // It's possible attackers could trigger this but that is basically harmless. It would just query the user.
-            poll_user_paid()
-        } else if (message == 'trial-start') {
-            // no need to poll since the trial confirmation page has already set trialStartedAt
-            fetch_user() 
-        } else if (message == 'extpay-extinfo' && browser.management) {
-            // get this message from content scripts which can't access browser.management
-            return browser.management.getSelf()
-        }
-    });
+
     
     return {
         getUser: function() {
@@ -319,13 +307,22 @@ You can copy and paste this to your manifest.json file to fix this error:
                 trial_callbacks.push(callback)
             }
         },
-        // paymentPageLink: function() {
-        //     return new Promise((resolve, reject) => {
-        //         browser.storage.sync.get(['extensionpay_api_key'], function(storage) {
-        //             resolve(`${EXTENSION_URL}?api_key=${storage.extensionpay_api_key}`)
-        //         })
-        //     })
-        // }
+        startBackground: function() {
+            browser.runtime.onMessage.addListener(function(message, sender, send_response) {
+                console.log('service worker got message! Here it is:', message)
+                if (message == 'fetch-user') {
+                    // Only called via extensionpay.com/extension/[extension-id]/paid -> content_script when user successfully pays.
+                    // It's possible attackers could trigger this but that is basically harmless. It would just query the user.
+                    poll_user_paid()
+                } else if (message == 'trial-start') {
+                    // no need to poll since the trial confirmation page has already set trialStartedAt
+                    fetch_user() 
+                } else if (message == 'extpay-extinfo' && browser.management) {
+                    // get this message from content scripts which can't access browser.management
+                    return browser.management.getSelf()
+                }
+            });
+        }
     }
 }
 

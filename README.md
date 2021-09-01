@@ -25,12 +25,12 @@ npm install extpay --save
 
 
 ## 2. Configure your `manifest.json`
-ExtPay needs the following configuration in your V2 `manifest.json`:
+ExtPay needs the following configuration in your `manifest.json` (for both manifest v2 and v3):
+
 ```json
 {
-    "manifest_version": 2,
     "permissions": [
-        "storage"
+      "storage"
     ]
 }
 ```
@@ -39,15 +39,46 @@ ExtPay will not show a scary permission warning when users try to install your e
 
 If you have a `"content_security_policy"` in your manifest or get a `Refused to connect to 'https://extensionpay.com...'` error, you'll have to add `connect-src https://extensionpay.com` to your extension's content security policy. <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/content_security_policy">See Mozilla's documentation for more details</a>.
 
-Manifest V3 support coming soon.
-
 
 ## 3. Add `ExtPay` to `background.js` (required!)
 
-You need to put `ExtPay` in your background file, often named something like `background.js`. If you don't include `ExtPay` in your background file it won't work correctly.
+You need to put `ExtPay` in your background file, often named something like `background.js`. If you don't include `ExtPay` in your background file it won't work correctly. If you're using a bundler you can `import 'ExtPay'` or `require('ExtPay')` right in your `background.js`.
+
+With either Manifest V3 or Manifest V2 you'll need to **[sign up and register an extension](https://extensionpay.com)**. When you register an extension you'll create an extension id that you'll use when initializing `ExtPay`. We'll use `sample-extension` as the extension id in the following examples.
+
+### Manifest V3
+
+```json
+{
+    "background": {
+        "service_worker": ["background.js"]
+    }
+}
+```
+
+```js
+// background.js
+
+importScripts('ExtPay.js') // or `import` / `require` if using a bundler
+
+var extpay = ExtPay('sample-extension'); // Careful! See note below
+extpay.startBackground(); 
+```
+
+**Note about service workers**: In the example above `extpay` will become undefined when accessed in service worker callbacks. To use `extpay` in service worker callbacks, redeclare it like so:
+
+```js
+chrome.storage.local.get('foo', function() {
+    var extpay = ExtPay('sample-extension');
+    // ...
+})
+```
+Make sure not to use `extpay.startBackground()` in callbacks — it should only be called once.
+
+### Manifest V2
 
 If you're not using a bundler, add `ExtPay.js` to `manifest.json`:
-```js
+```json
 {
     "background": {
         "scripts": ["ExtPay.js", "background.js"]
@@ -55,14 +86,14 @@ If you're not using a bundler, add `ExtPay.js` to `manifest.json`:
 }
 ```
 
-Then initialize ExtPay with your extension's unique `extension-id`, which you get by **[signing up and registering an extension](https://extensionpay.com)**. In the example below, the `extension-id` is `sample-extension`.
 
 ```js
 // background.js
 const extpay = ExtPay('sample-extension')
+extpay.startBackground();
 ```
 
-If you're using a bundler you can `import 'ExtPay'` or `require('ExtPay')` right in your `background.js`.
+
 
 
 ## 4. Use `extpay.getUser()` to check a user's paid status
@@ -134,7 +165,6 @@ To use this feature, you will need to include the following content script confi
 
 ```json
 {
-    "manifest_version": 2,
     "content_scripts": [
         {
             "matches": ["https://extensionpay.com/*"],
@@ -194,7 +224,6 @@ You can also use `extpay.onTrialStarted.addListener()` to run functions when the
 
 ```json
 {
-    "manifest_version": 2,
     "content_scripts": [
         {
             "matches": ["https://extensionpay.com/*"],
@@ -204,3 +233,11 @@ You can also use `extpay.onTrialStarted.addListener()` to run functions when the
     ]
 }
 ```
+
+
+## Contributing
+
+1. `npm install`
+2. Edit `ExtPay.dev.js`
+3. `npm run dev`
+4. `npm run dist` before committing changes.

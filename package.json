@@ -1,6 +1,6 @@
 {
   "name": "extpay",
-  "version": "2.4.1",
+  "version": "3.0.0",
   "description": "The JavaScript library for https://extensionpay.com - payments for browser extensions, no server needed.",
   "main": "./dist/ExtPay.common.js",
   "module": "./dist/ExtPay.module.js",
@@ -8,8 +8,8 @@
   "unpkg": "./dist/ExtPay.js",
   "jsdelivr": "./dist/ExtPay.js",
   "scripts": {
-    "replace_localhost": "sed -i '' \"s|http://localhost:3000|https://extensionpay\\.com|g\" sample-extension/manifest.json",
-    "replace_extpay": "sed -i '' \"s|https://extensionpay\\.com|http://localhost:3000|g\" sample-extension/manifest.json",
+    "replace_localhost": "sed -i '' \"s|http://localhost:3000|https://extensionpay\\.com|g\" sample-extension-mv2/manifest.json sample-extension-mv3/manifest.json",
+    "replace_extpay": "sed -i '' \"s|https://extensionpay\\.com|http://localhost:3000|g\" sample-extension-mv2/manifest.json sample-extension-mv3/manifest.json",
     "dev": "npm run replace_extpay && rollup -w -c rollup.config.dev.js || npm run replace_localhost",
     "dist": "rollup -c rollup.config.release.js && npm run replace_localhost"
   },

@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
-    "name": "ExtensionPay Sample Extension",
-    "short_name": "extensionpaysample",
+    "name": "ExtensionPay Sample Extension (Manifest v2)",
+    "short_name": "extensionpaysamplemv2",
     "version": "1.0",
     "author": "ExtensionPay",
     "description": "See how to use the ExtensionPay.com JS API to charge for you browser extensions.",
@@ -10,7 +10,7 @@
     },
     "content_scripts": [
         {
-            "matches": ["https://extensionpay.com/*"],
+            "matches": ["http://localhost:3000/*"],
             "js": ["ExtPay.js"],
             "run_at": "document_start"
         }

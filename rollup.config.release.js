@@ -13,7 +13,12 @@ export default [
             name: 'ExtPay'
         },
         {
-            file: 'sample-extension/ExtPay.js',
+            file: 'sample-extension-mv2/ExtPay.js',
+            format: 'iife',
+            name: 'ExtPay'
+        },
+        {
+            file: 'sample-extension-mv3/ExtPay.js',
             format: 'iife',
             name: 'ExtPay'
         }],

@@ -1,0 +1,25 @@
+{
+    "manifest_version": 3,
+    "name": "ExtensionPay Sample Extension (Manifest v3)",
+    "short_name": "extensionpaysamplemv3",
+    "version": "1.0",
+    "author": "ExtensionPay",
+    "description": "See how to use the ExtensionPay.com JS API to charge for you browser extensions.",
+    "background": {
+        "service_worker": "background.js"
+    },
+    "content_scripts": [
+        {
+            "matches": ["http://localhost:3000/*"],
+            "js": ["ExtPay.js"],
+            "run_at": "document_start"
+        }
+    ],
+    "action": {
+        "default_popup": "popup.html"
+    },
+    "permissions": [
+        "storage"
+    ]
+}
+

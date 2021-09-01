@@ -1238,7 +1238,7 @@ var ExtPay = (function () {
 	// and pass it on to the background page to query if the user has paid.
 	if (typeof window !== 'undefined') {
 	    window.addEventListener('message', (event) => {
-	        if (event.origin !== 'https://extensionpay.com') return;
+	        if (event.origin !== 'http://localhost:3000') return;
 	        if (event.source != window) return;
 	        if (event.data === 'fetch-user' || event.data === 'trial-start') {
 	            browserPolyfill.runtime.sendMessage(event.data);
@@ -1248,7 +1248,7 @@ var ExtPay = (function () {
 
 	function ExtPay(extension_id) {
 
-	    const HOST = `https://extensionpay.com`;
+	    const HOST = `http://localhost:3000`;
 	    const EXTENSION_URL = `${HOST}/extension/${extension_id}`;
 
 	    function timeout(ms) {
@@ -1487,19 +1487,7 @@ You can copy and paste this to your manifest.json file to fix this error:
 	        polling = false;
 	    }
 
-	    browserPolyfill.runtime.onMessage.addListener(function(message, sender, send_response) {
-	        if (message == 'fetch-user') {
-	            // Only called via extensionpay.com/extension/[extension-id]/paid -> content_script when user successfully pays.
-	            // It's possible attackers could trigger this but that is basically harmless. It would just query the user.
-	            poll_user_paid();
-	        } else if (message == 'trial-start') {
-	            // no need to poll since the trial confirmation page has already set trialStartedAt
-	            fetch_user(); 
-	        } else if (message == 'extpay-extinfo' && browserPolyfill.management) {
-	            // get this message from content scripts which can't access browser.management
-	            return browserPolyfill.management.getSelf()
-	        }
-	    });
+
 	    
 	    return {
 	        getUser: function() {
@@ -1548,13 +1536,22 @@ You can copy and paste this to your manifest.json file to fix this error:
 	                trial_callbacks.push(callback);
 	            }
 	        },
-	        // paymentPageLink: function() {
-	        //     return new Promise((resolve, reject) => {
-	        //         browser.storage.sync.get(['extensionpay_api_key'], function(storage) {
-	        //             resolve(`${EXTENSION_URL}?api_key=${storage.extensionpay_api_key}`)
-	        //         })
-	        //     })
-	        // }
+	        startBackground: function() {
+	            browserPolyfill.runtime.onMessage.addListener(function(message, sender, send_response) {
+	                console.log('service worker got message! Here it is:', message);
+	                if (message == 'fetch-user') {
+	                    // Only called via extensionpay.com/extension/[extension-id]/paid -> content_script when user successfully pays.
+	                    // It's possible attackers could trigger this but that is basically harmless. It would just query the user.
+	                    poll_user_paid();
+	                } else if (message == 'trial-start') {
+	                    // no need to poll since the trial confirmation page has already set trialStartedAt
+	                    fetch_user(); 
+	                } else if (message == 'extpay-extinfo' && browserPolyfill.management) {
+	                    // get this message from content scripts which can't access browser.management
+	                    return browserPolyfill.management.getSelf()
+	                }
+	            });
+	        }
 	    }
 	}
 

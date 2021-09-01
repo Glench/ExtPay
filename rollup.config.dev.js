@@ -4,12 +4,22 @@ const rollup_resolve = require('@rollup/plugin-node-resolve').nodeResolve
 export default {
     input: 'ExtPay.dev.js',
     output: [{
-        file: 'sample-extension/ExtPay.js',
+        file: 'sample-extension-mv2/ExtPay.js',
         format: 'iife',
         name: 'ExtPay'
     },
     {
-        file: 'test-extension/ExtPay.js',
+        file: 'sample-extension-mv3/ExtPay.js',
+        format: 'iife',
+        name: 'ExtPay'
+    },
+    {
+        file: 'dev-extension-mv3/ExtPay.js',
+        format: 'iife',
+        name: 'ExtPay'
+    },
+    {
+        file: 'dev-extension-mv2/ExtPay.js',
         format: 'iife',
         name: 'ExtPay'
     }],
