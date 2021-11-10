@@ -51,7 +51,7 @@ With either Manifest V3 or Manifest V2 you'll need to **[sign up and register an
 ```json
 {
     "background": {
-        "service_worker": ["background.js"]
+        "service_worker": "background.js"
     }
 }
 ```
