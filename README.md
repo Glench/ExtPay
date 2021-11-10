@@ -1,7 +1,7 @@
 # ExtPay.js — Payments in browser extensions
 The JavaScript library for [ExtensionPay.com](https://extensionpay.com), a service to easily add payments to browser extensions without running your own server backend.
 
-Below are directions for using this library in your browser extension. If you learn better by example, you can also view the code for a **[sample extension](sample-extension/)**. This library uses [Mozilla's webextension-polyfill library](https://github.com/mozilla/webextension-polyfill) internally for compatability across browsers which means it should work on almost all modern browsers.
+Below are directions for using this library in your browser extension. If you learn better by example, you can also view the code for a **[sample extension](sample-extension-mv3/)**. This library uses [Mozilla's webextension-polyfill library](https://github.com/mozilla/webextension-polyfill) internally for compatability across browsers which means it should work on almost all modern browsers.
 
   1. [Install](#1-install)
   2. [Configure your `manifest.json`](#2-configure-your-manifestjson)

@@ -10,7 +10,7 @@
     },
     "content_scripts": [
         {
-            "matches": ["https://extensionpay.com/*"],
+            "matches": ["http://localhost:3000/*"],
             "js": ["ExtPay.js"],
             "run_at": "document_start"
         }
