@@ -1238,7 +1238,7 @@ var ExtPay = (function () {
 	// and pass it on to the background page to query if the user has paid.
 	if (typeof window !== 'undefined') {
 	    window.addEventListener('message', (event) => {
-	        if (event.origin !== 'http://localhost:3000') return;
+	        if (event.origin !== 'https://extensionpay.com') return;
 	        if (event.source != window) return;
 	        if (event.data === 'fetch-user' || event.data === 'trial-start') {
 	            browserPolyfill.runtime.sendMessage(event.data);
@@ -1248,7 +1248,7 @@ var ExtPay = (function () {
 
 	function ExtPay(extension_id) {
 
-	    const HOST = `http://localhost:3000`;
+	    const HOST = `https://extensionpay.com`;
 	    const EXTENSION_URL = `${HOST}/extension/${extension_id}`;
 
 	    function timeout(ms) {
