@@ -1,3 +1,7 @@
+// To test payments, replace 'sample-extension' with the ID of
+// the extension you registered on ExtensionPay.com. You may
+// need to uninstall and reinstall the extension.
+// And don't forget to change the ID in background.js too!
 const extpay = ExtPay('sample-extension') 
 
 document.querySelector('button').addEventListener('click', extpay.openPaymentPage)
