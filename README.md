@@ -4,7 +4,8 @@ The JavaScript library for [ExtensionPay.com](https://extensionpay.com), a servi
 ```js
 // Example code
 // your-extension/background.js
-const extpay = ExtPay('your-extension')
+const extpay = ExtPay('your-extension-id');
+extpay.startBackground();
 
 extpay.getUser().then(user => {
     if (user.paid) {
