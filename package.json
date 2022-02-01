@@ -1,12 +1,13 @@
 {
   "name": "extpay",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "The JavaScript library for https://extensionpay.com - payments for browser extensions, no server needed.",
   "main": "./dist/ExtPay.common.js",
   "module": "./dist/ExtPay.module.js",
   "browser": "./dist/ExtPay.js",
   "unpkg": "./dist/ExtPay.js",
   "jsdelivr": "./dist/ExtPay.js",
+  "types": "./types.d.ts",
   "scripts": {
     "replace_localhost": "sed -i '' \"s|http://localhost:3000|https://extensionpay\\.com|g\" sample-extension-mv2/manifest.json sample-extension-mv3/manifest.json",
     "replace_extpay": "sed -i '' \"s|https://extensionpay\\.com|http://localhost:3000|g\" sample-extension-mv2/manifest.json sample-extension-mv3/manifest.json",
