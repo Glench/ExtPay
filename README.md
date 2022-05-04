@@ -209,7 +209,7 @@ The subscription management page looks something like this:
 
 <img src="docs/subscription_management_screenshot.png" alt="Screenshot of example subscription management page." width="400"> 
 
-Note: please read the [detailed docs on subscriptions here](/docs/how_subscriptions_work.md).
+Note: please read the **[detailed docs on subscriptions here](/docs/how_subscriptions_work.md)**.
 
 
 ## 8. Use `extpay.openTrialPage()` to let the user sign up for a free trial
