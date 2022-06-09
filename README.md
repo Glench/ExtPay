@@ -1,5 +1,5 @@
 # ExtPay.js — Payments in browser extensions
-The JavaScript library for [ExtensionPay.com](https://extensionpay.com), a service to easily add payments to browser extensions without running your own server backend.
+The JavaScript library for [ExtensionPay.com](https://extensionpay.com), a service to easily add payments to browser extensions.
 
 ```js
 // Example code
