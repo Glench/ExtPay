@@ -1,5 +1,20 @@
 # ExtPay.js — Payments in browser extensions
-The JavaScript library for [ExtensionPay.com](https://extensionpay.com), a service to easily add payments to browser extensions without running your own server backend.
+The JavaScript library for [ExtensionPay.com](https://extensionpay.com), a service to easily add payments to browser extensions.
+
+```js
+// Example code
+// your-extension/background.js
+const extpay = ExtPay('your-extension-id');
+extpay.startBackground();
+
+extpay.getUser().then(user => {
+    if (user.paid) {
+        // ...
+    } else {
+        extpay.openPaymentPage()
+    }
+})
+```
 
 Below are directions for using this library in your browser extension. If you learn better by example, you can also view the code for a **[sample extension](sample-extension-mv3/)**. This library uses [Mozilla's webextension-polyfill library](https://github.com/mozilla/webextension-polyfill) internally for compatability across browsers which means it should work on almost all modern browsers.
 
@@ -194,7 +209,7 @@ The subscription management page looks something like this:
 
 <img src="docs/subscription_management_screenshot.png" alt="Screenshot of example subscription management page." width="400"> 
 
-Note: please read the [detailed docs on subscriptions here](/docs/how_subscriptions_work.md).
+Note: please read the **[detailed docs on subscriptions here](/docs/how_subscriptions_work.md)**.
 
 
 ## 8. Use `extpay.openTrialPage()` to let the user sign up for a free trial
