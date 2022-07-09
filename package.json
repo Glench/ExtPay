@@ -4,7 +4,6 @@
   "description": "The JavaScript library for https://extensionpay.com - payments for browser extensions, no server needed.",
   "main": "./dist/ExtPay.common.js",
   "module": "./dist/ExtPay.module.js",
-  "browser": "./dist/ExtPay.js",
   "unpkg": "./dist/ExtPay.js",
   "jsdelivr": "./dist/ExtPay.js",
   "types": "./types.d.ts",
