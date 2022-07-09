@@ -30,6 +30,8 @@ Below are directions for using this library in your browser extension. If you le
 
 **Note**: ExtPay.js doesn't contain malware or track your users in any way. This library only communicates with ExtensionPay.com servers to manage users' paid status.
 
+If you like this library, please star it! ⭐️ It helps us out :)
+
 ## 1. Install
 
 Copy the [dist/ExtPay.js](dist/ExtPay.js) file into your project, or, if you're using a bundler (like Webpack or Rollup):
