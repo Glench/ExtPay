@@ -1468,6 +1468,37 @@ You can copy and paste this to your manifest.json file to fix this error:
 	        }
 	    
 	    }
+	    async function open_login_page() {
+	        var api_key = await get_key();
+	        if (!api_key) {
+	            api_key = await create_key();
+	        }
+	        const url = `${EXTENSION_URL}/reactivate?api_key=${api_key}`;
+	        if (browserPolyfill.windows) {
+	            try {
+	                browserPolyfill.windows.create({
+	                    url: url,
+	                    type: "popup",
+	                    focused: true,
+	                    width: 500,
+	                    height: 800,
+	                    left: 450
+	                });
+	            } catch(e) {
+	                // firefox doesn't support 'focused'
+	                browserPolyfill.windows.create({
+	                    url: url,
+	                    type: "popup",
+	                    width: 500,
+	                    height: 800,
+	                    left: 450
+	                });
+	            }
+	        } else {
+	            // https://developer.mozilla.org/en-US/docs/Web/API/Window/open
+	            window.open(url, null, "toolbar=no,location=no,directories=no,status=no,menubar=no,width=500,height=800,left=450");
+	        }
+	    }
 
 
 	    var polling = false;
@@ -1531,6 +1562,7 @@ You can copy and paste this to your manifest.json file to fix this error:
 	        },
 	        openPaymentPage: open_payment_page,
 	        openTrialPage: open_trial_page,
+	        openLoginPage: open_login_page,
 	        onTrialStarted: {
 	            addListener: function(callback) {
 	                trial_callbacks.push(callback);

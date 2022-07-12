@@ -27,6 +27,7 @@ Below are directions for using this library in your browser extension. If you le
   6. [Use `extpay.onPaid.addListener()` to run code when the user pays](#6-use-extpayonpaidaddlistener-to-run-code-when-the-user-pays)
   7. [Use `extpay.openPaymentPage()` to let the user manage their subscription preferences](#7-use-extpayopenpaymentpage-to-let-the-user-manage-their-subscription-preferences)
   8. [Use `extpay.openTrialPage()` to let the user sign up for a free trial](#8-use-extpayopentrialpage-to-let-the-user-sign-up-for-a-free-trial)
+  9. [Use `extpay.openLoginPage()` to let the user log in if they've paid already](#9-use-extpayopenloginpage-to-let-the-user-log-in-if-theyve-paid-already)
 
 **Note**: ExtPay.js doesn't contain malware or track your users in any way. This library only communicates with ExtensionPay.com servers to manage users' paid status.
 
@@ -253,6 +254,9 @@ You can also use `extpay.onTrialStarted.addListener()` to run functions when the
 }
 ```
 
+## 9. Use `extpay.openLoginPage()` to let the user log in if they've paid already
+
+A page will open that will allow the user to enter the email they paid with to receive a magic login link. This page can also be accessed through the normal payment screen.
 
 ## Contributing
 
