@@ -144,6 +144,7 @@ The `user` object returned from `extpay.getUser()` has the following properties:
 | --- | --- |
 | `user.paid` | `true` or `false`. `user.paid` is meant to be a simple way to tell if the user should have paid features activated. For subscription payments, `paid` is only true if `subscriptionStatus` is `active`. |
 | `user.paidAt` | `Date()` object that the user first paid or `null`.|
+| `user.email` | The user's email if there is one or `null`.|
 | `user.installedAt` | `Date()` object the user installed the extension. |
 | `user.trialStartedAt` | `null` or `Date()` object the user confirmed their free trial. |
 | **subscription only**| |
