@@ -1363,7 +1363,7 @@ You can copy and paste this to your manifest.json file to fix this error:
 	            }
 	        });
 	        // TODO: think harder about error states and what users will want (bad connection, server error, id not found)
-	        if (!resp.ok) throw 'ExtPay error while fetching user: '+resp
+	        if (!resp.ok) throw 'ExtPay error while fetching user: '+(await resp.text())
 
 	        const user_data = await resp.json();
 
@@ -1401,32 +1401,43 @@ You can copy and paste this to your manifest.json file to fix this error:
 	        return `${EXTENSION_URL}?api_key=${api_key}`
 	    }
 
-	    async function open_payment_page() {
-	        const url = await payment_page_link();
+	    async function open_popup(url, width, height) {
 	        if (browserPolyfill.windows) {
+	            const current_window = await browserPolyfill.windows.getCurrent();
+	            // https://stackoverflow.com/a/68456858
+	            const left = Math.round((current_window.width - width) * 0.5 + current_window.left);
+	            const top = Math.round((current_window.height - height) * 0.5 + current_window.top);
 	            try {
 	                browserPolyfill.windows.create({
 	                    url: url,
 	                    type: "popup",
 	                    focused: true,
-	                    width: 500,
-	                    height: 800,
-	                    left: 450
+	                    width,
+	                    height,
+	                    left,
+	                    top
 	                });
 	            } catch(e) {
 	                // firefox doesn't support 'focused'
 	                browserPolyfill.windows.create({
 	                    url: url,
 	                    type: "popup",
-	                    width: 500,
-	                    height: 800,
-	                    left: 450
+	                    width,
+	                    height,
+	                    left,
+	                    top
 	                });
 	            }
 	        } else {
+	            // for opening from a content script
 	            // https://developer.mozilla.org/en-US/docs/Web/API/Window/open
-	            window.open(url, null, "toolbar=no,location=no,directories=no,status=no,menubar=no,width=500,height=800,left=450");
+	            window.open(url, null, `toolbar=no,location=no,directories=no,status=no,menubar=no,width=${width},height=${height},left=450`);
 	        }
+	    }
+
+	    async function open_payment_page() {
+	        const url = await payment_page_link();
+	        open_popup(url, 500, 800);
 	    }
 
 	    async function open_trial_page(period) {
@@ -1440,33 +1451,7 @@ You can copy and paste this to your manifest.json file to fix this error:
 	        if (period) {
 	            url += `&period=${period}`;
 	        }
-
-	        if (browserPolyfill.windows) {
-	            try {
-	                browserPolyfill.windows.create({
-	                    url,
-	                    type: "popup",
-	                    focused: true,
-	                    width: 500,
-	                    height: 650,
-	                    left: 450
-	                });
-	            } catch(e) {
-	                // firefox doesn't support 'focused'
-	                browserPolyfill.windows.create({
-	                    url,
-	                    type: "popup",
-	                    width: 500,
-	                    height: 650,
-	                    left: 450
-	                });
-	            }
-	        } else {
-	            // https://developer.mozilla.org/en-US/docs/Web/API/Window/open
-	            // for opening from a content script
-	            window.open(url, null, "toolbar=no,location=no,directories=no,status=no,menubar=no,width=500,height=800,left=450");
-	        }
-	    
+	        open_popup(url, 500, 650);
 	    }
 	    async function open_login_page() {
 	        var api_key = await get_key();
@@ -1474,32 +1459,8 @@ You can copy and paste this to your manifest.json file to fix this error:
 	            api_key = await create_key();
 	        }
 	        const url = `${EXTENSION_URL}/reactivate?api_key=${api_key}`;
-	        if (browserPolyfill.windows) {
-	            try {
-	                browserPolyfill.windows.create({
-	                    url: url,
-	                    type: "popup",
-	                    focused: true,
-	                    width: 500,
-	                    height: 800,
-	                    left: 450
-	                });
-	            } catch(e) {
-	                // firefox doesn't support 'focused'
-	                browserPolyfill.windows.create({
-	                    url: url,
-	                    type: "popup",
-	                    width: 500,
-	                    height: 800,
-	                    left: 450
-	                });
-	            }
-	        } else {
-	            // https://developer.mozilla.org/en-US/docs/Web/API/Window/open
-	            window.open(url, null, "toolbar=no,location=no,directories=no,status=no,menubar=no,width=500,height=800,left=450");
-	        }
+	        open_popup(url, 500, 800);
 	    }
-
 
 	    var polling = false;
 	    async function poll_user_paid() {
