@@ -22,7 +22,13 @@ export default {
         file: 'dev-extension-mv2/ExtPay.js',
         format: 'iife',
         name: 'ExtPay'
-    }],
+    },
+    {
+        file: 'Safari/ExtensionPay Dev extension/Shared (Extension)/Resources/ExtPay.js',
+        format: 'iife',
+        name: 'ExtPay'
+    },
+    ],
     plugins: [
         rollup_resolve({
             browser: true,

@@ -1,0 +1,972 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		F15022B228D0D52600A85933 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F15022B128D0D52600A85933 /* AppDelegate.swift */; };
+		F15022B428D0D52600A85933 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F15022B328D0D52600A85933 /* SceneDelegate.swift */; };
+		F15022B728D0D52600A85933 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F15022B528D0D52600A85933 /* LaunchScreen.storyboard */; };
+		F15022BA28D0D52600A85933 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F15022B828D0D52600A85933 /* Main.storyboard */; };
+		F15022C328D0D52700A85933 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F15022C228D0D52700A85933 /* AppDelegate.swift */; };
+		F15022C628D0D52700A85933 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F15022C428D0D52700A85933 /* Main.storyboard */; };
+		F15022CD28D0D52700A85933 /* ExtensionPay Dev extension Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = F15022CC28D0D52700A85933 /* ExtensionPay Dev extension Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		F15022D728D0D52700A85933 /* ExtensionPay Dev extension Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = F15022D628D0D52700A85933 /* ExtensionPay Dev extension Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		F15022DD28D0D52700A85933 /* Main.html in Resources */ = {isa = PBXBuildFile; fileRef = F150229828D0D52200A85933 /* Main.html */; };
+		F15022DE28D0D52700A85933 /* Main.html in Resources */ = {isa = PBXBuildFile; fileRef = F150229828D0D52200A85933 /* Main.html */; };
+		F15022DF28D0D52700A85933 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = F150229A28D0D52200A85933 /* Icon.png */; };
+		F15022E028D0D52700A85933 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = F150229A28D0D52200A85933 /* Icon.png */; };
+		F15022E128D0D52700A85933 /* Style.css in Resources */ = {isa = PBXBuildFile; fileRef = F150229B28D0D52200A85933 /* Style.css */; };
+		F15022E228D0D52700A85933 /* Style.css in Resources */ = {isa = PBXBuildFile; fileRef = F150229B28D0D52200A85933 /* Style.css */; };
+		F15022E328D0D52700A85933 /* Script.js in Resources */ = {isa = PBXBuildFile; fileRef = F150229C28D0D52200A85933 /* Script.js */; };
+		F15022E428D0D52700A85933 /* Script.js in Resources */ = {isa = PBXBuildFile; fileRef = F150229C28D0D52200A85933 /* Script.js */; };
+		F15022E528D0D52700A85933 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F150229D28D0D52200A85933 /* ViewController.swift */; };
+		F15022E628D0D52700A85933 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F150229D28D0D52200A85933 /* ViewController.swift */; };
+		F15022E728D0D52700A85933 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F150229E28D0D52600A85933 /* Assets.xcassets */; };
+		F15022E828D0D52700A85933 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F150229E28D0D52600A85933 /* Assets.xcassets */; };
+		F15022E928D0D52700A85933 /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F15022A028D0D52600A85933 /* SafariWebExtensionHandler.swift */; };
+		F15022EA28D0D52700A85933 /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F15022A028D0D52600A85933 /* SafariWebExtensionHandler.swift */; };
+		F15022EB28D0D52700A85933 /* _locales in Resources */ = {isa = PBXBuildFile; fileRef = F15022A228D0D52600A85933 /* _locales */; };
+		F15022EC28D0D52700A85933 /* _locales in Resources */ = {isa = PBXBuildFile; fileRef = F15022A228D0D52600A85933 /* _locales */; };
+		F15022ED28D0D52700A85933 /* images in Resources */ = {isa = PBXBuildFile; fileRef = F15022A328D0D52600A85933 /* images */; };
+		F15022EE28D0D52700A85933 /* images in Resources */ = {isa = PBXBuildFile; fileRef = F15022A328D0D52600A85933 /* images */; };
+		F15022EF28D0D52700A85933 /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = F15022A428D0D52600A85933 /* manifest.json */; };
+		F15022F028D0D52700A85933 /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = F15022A428D0D52600A85933 /* manifest.json */; };
+		F15022F128D0D52700A85933 /* background.js in Resources */ = {isa = PBXBuildFile; fileRef = F15022A528D0D52600A85933 /* background.js */; };
+		F15022F228D0D52700A85933 /* background.js in Resources */ = {isa = PBXBuildFile; fileRef = F15022A528D0D52600A85933 /* background.js */; };
+		F15022F328D0D52700A85933 /* content.js in Resources */ = {isa = PBXBuildFile; fileRef = F15022A628D0D52600A85933 /* content.js */; };
+		F15022F428D0D52700A85933 /* content.js in Resources */ = {isa = PBXBuildFile; fileRef = F15022A628D0D52600A85933 /* content.js */; };
+		F15022F528D0D52700A85933 /* popup.html in Resources */ = {isa = PBXBuildFile; fileRef = F15022A728D0D52600A85933 /* popup.html */; };
+		F15022F628D0D52700A85933 /* popup.html in Resources */ = {isa = PBXBuildFile; fileRef = F15022A728D0D52600A85933 /* popup.html */; };
+		F15022F728D0D52700A85933 /* popup.css in Resources */ = {isa = PBXBuildFile; fileRef = F15022A828D0D52600A85933 /* popup.css */; };
+		F15022F828D0D52700A85933 /* popup.css in Resources */ = {isa = PBXBuildFile; fileRef = F15022A828D0D52600A85933 /* popup.css */; };
+		F15022F928D0D52700A85933 /* popup.js in Resources */ = {isa = PBXBuildFile; fileRef = F15022A928D0D52600A85933 /* popup.js */; };
+		F15022FA28D0D52700A85933 /* popup.js in Resources */ = {isa = PBXBuildFile; fileRef = F15022A928D0D52600A85933 /* popup.js */; };
+		F150230C28D0DCA900A85933 /* ExtPay.js in Resources */ = {isa = PBXBuildFile; fileRef = F150230B28D0DCA800A85933 /* ExtPay.js */; };
+		F150230D28D0DCA900A85933 /* ExtPay.js in Resources */ = {isa = PBXBuildFile; fileRef = F150230B28D0DCA800A85933 /* ExtPay.js */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		F15022CE28D0D52700A85933 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F150229228D0D52100A85933 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F15022CB28D0D52700A85933;
+			remoteInfo = "ExtensionPay Dev extension Extension (iOS)";
+		};
+		F15022D828D0D52700A85933 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F150229228D0D52100A85933 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F15022D528D0D52700A85933;
+			remoteInfo = "ExtensionPay Dev extension Extension (macOS)";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		F150230028D0D52700A85933 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				F15022CD28D0D52700A85933 /* ExtensionPay Dev extension Extension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F150230728D0D52700A85933 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				F15022D728D0D52700A85933 /* ExtensionPay Dev extension Extension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		F150229928D0D52200A85933 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = Base; path = ../Base.lproj/Main.html; sourceTree = "<group>"; };
+		F150229A28D0D52200A85933 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		F150229B28D0D52200A85933 /* Style.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = Style.css; sourceTree = "<group>"; };
+		F150229C28D0D52200A85933 /* Script.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = Script.js; sourceTree = "<group>"; };
+		F150229D28D0D52200A85933 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		F150229E28D0D52600A85933 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		F15022A028D0D52600A85933 /* SafariWebExtensionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariWebExtensionHandler.swift; sourceTree = "<group>"; };
+		F15022A228D0D52600A85933 /* _locales */ = {isa = PBXFileReference; lastKnownFileType = folder; path = _locales; sourceTree = "<group>"; };
+		F15022A328D0D52600A85933 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
+		F15022A428D0D52600A85933 /* manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = manifest.json; sourceTree = "<group>"; };
+		F15022A528D0D52600A85933 /* background.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = background.js; sourceTree = "<group>"; };
+		F15022A628D0D52600A85933 /* content.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = content.js; sourceTree = "<group>"; };
+		F15022A728D0D52600A85933 /* popup.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = popup.html; sourceTree = "<group>"; };
+		F15022A828D0D52600A85933 /* popup.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = popup.css; sourceTree = "<group>"; };
+		F15022A928D0D52600A85933 /* popup.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = popup.js; sourceTree = "<group>"; };
+		F15022AE28D0D52600A85933 /* ExtensionPay Dev extension.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ExtensionPay Dev extension.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F15022B128D0D52600A85933 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		F15022B328D0D52600A85933 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		F15022B628D0D52600A85933 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		F15022B928D0D52600A85933 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		F15022BB28D0D52600A85933 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F15022C028D0D52700A85933 /* ExtensionPay Dev extension.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ExtensionPay Dev extension.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F15022C228D0D52700A85933 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		F15022C528D0D52700A85933 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		F15022C728D0D52700A85933 /* ExtensionPay Dev extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "ExtensionPay Dev extension.entitlements"; sourceTree = "<group>"; };
+		F15022CC28D0D52700A85933 /* ExtensionPay Dev extension Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "ExtensionPay Dev extension Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F15022D128D0D52700A85933 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F15022D628D0D52700A85933 /* ExtensionPay Dev extension Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "ExtensionPay Dev extension Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F15022DB28D0D52700A85933 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F15022DC28D0D52700A85933 /* ExtensionPay Dev extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "ExtensionPay Dev extension.entitlements"; sourceTree = "<group>"; };
+		F150230B28D0DCA800A85933 /* ExtPay.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = ExtPay.js; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		F15022AB28D0D52600A85933 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F15022BD28D0D52700A85933 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F15022C928D0D52700A85933 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F15022D328D0D52700A85933 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		F150229128D0D52100A85933 = {
+			isa = PBXGroup;
+			children = (
+				F150229628D0D52200A85933 /* Shared (App) */,
+				F150229F28D0D52600A85933 /* Shared (Extension) */,
+				F15022B028D0D52600A85933 /* iOS (App) */,
+				F15022C128D0D52700A85933 /* macOS (App) */,
+				F15022D028D0D52700A85933 /* iOS (Extension) */,
+				F15022DA28D0D52700A85933 /* macOS (Extension) */,
+				F15022AF28D0D52600A85933 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		F150229628D0D52200A85933 /* Shared (App) */ = {
+			isa = PBXGroup;
+			children = (
+				F150229D28D0D52200A85933 /* ViewController.swift */,
+				F150229E28D0D52600A85933 /* Assets.xcassets */,
+				F150229728D0D52200A85933 /* Resources */,
+			);
+			path = "Shared (App)";
+			sourceTree = "<group>";
+		};
+		F150229728D0D52200A85933 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				F150229828D0D52200A85933 /* Main.html */,
+				F150229A28D0D52200A85933 /* Icon.png */,
+				F150229B28D0D52200A85933 /* Style.css */,
+				F150229C28D0D52200A85933 /* Script.js */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		F150229F28D0D52600A85933 /* Shared (Extension) */ = {
+			isa = PBXGroup;
+			children = (
+				F15022A028D0D52600A85933 /* SafariWebExtensionHandler.swift */,
+				F15022A128D0D52600A85933 /* Resources */,
+			);
+			path = "Shared (Extension)";
+			sourceTree = "<group>";
+		};
+		F15022A128D0D52600A85933 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				F15022A228D0D52600A85933 /* _locales */,
+				F15022A328D0D52600A85933 /* images */,
+				F15022A428D0D52600A85933 /* manifest.json */,
+				F15022A528D0D52600A85933 /* background.js */,
+				F15022A628D0D52600A85933 /* content.js */,
+				F150230B28D0DCA800A85933 /* ExtPay.js */,
+				F15022A728D0D52600A85933 /* popup.html */,
+				F15022A828D0D52600A85933 /* popup.css */,
+				F15022A928D0D52600A85933 /* popup.js */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		F15022AF28D0D52600A85933 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F15022AE28D0D52600A85933 /* ExtensionPay Dev extension.app */,
+				F15022C028D0D52700A85933 /* ExtensionPay Dev extension.app */,
+				F15022CC28D0D52700A85933 /* ExtensionPay Dev extension Extension.appex */,
+				F15022D628D0D52700A85933 /* ExtensionPay Dev extension Extension.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F15022B028D0D52600A85933 /* iOS (App) */ = {
+			isa = PBXGroup;
+			children = (
+				F15022B128D0D52600A85933 /* AppDelegate.swift */,
+				F15022B328D0D52600A85933 /* SceneDelegate.swift */,
+				F15022B528D0D52600A85933 /* LaunchScreen.storyboard */,
+				F15022B828D0D52600A85933 /* Main.storyboard */,
+				F15022BB28D0D52600A85933 /* Info.plist */,
+			);
+			path = "iOS (App)";
+			sourceTree = "<group>";
+		};
+		F15022C128D0D52700A85933 /* macOS (App) */ = {
+			isa = PBXGroup;
+			children = (
+				F15022C228D0D52700A85933 /* AppDelegate.swift */,
+				F15022C428D0D52700A85933 /* Main.storyboard */,
+				F15022C728D0D52700A85933 /* ExtensionPay Dev extension.entitlements */,
+			);
+			path = "macOS (App)";
+			sourceTree = "<group>";
+		};
+		F15022D028D0D52700A85933 /* iOS (Extension) */ = {
+			isa = PBXGroup;
+			children = (
+				F15022D128D0D52700A85933 /* Info.plist */,
+			);
+			path = "iOS (Extension)";
+			sourceTree = "<group>";
+		};
+		F15022DA28D0D52700A85933 /* macOS (Extension) */ = {
+			isa = PBXGroup;
+			children = (
+				F15022DB28D0D52700A85933 /* Info.plist */,
+				F15022DC28D0D52700A85933 /* ExtensionPay Dev extension.entitlements */,
+			);
+			path = "macOS (Extension)";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		F15022AD28D0D52600A85933 /* ExtensionPay Dev extension (iOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F150230128D0D52700A85933 /* Build configuration list for PBXNativeTarget "ExtensionPay Dev extension (iOS)" */;
+			buildPhases = (
+				F15022AA28D0D52600A85933 /* Sources */,
+				F15022AB28D0D52600A85933 /* Frameworks */,
+				F15022AC28D0D52600A85933 /* Resources */,
+				F150230028D0D52700A85933 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F15022CF28D0D52700A85933 /* PBXTargetDependency */,
+			);
+			name = "ExtensionPay Dev extension (iOS)";
+			productName = "ExtensionPay Dev extension (iOS)";
+			productReference = F15022AE28D0D52600A85933 /* ExtensionPay Dev extension.app */;
+			productType = "com.apple.product-type.application";
+		};
+		F15022BF28D0D52700A85933 /* ExtensionPay Dev extension (macOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F150230828D0D52700A85933 /* Build configuration list for PBXNativeTarget "ExtensionPay Dev extension (macOS)" */;
+			buildPhases = (
+				F15022BC28D0D52700A85933 /* Sources */,
+				F15022BD28D0D52700A85933 /* Frameworks */,
+				F15022BE28D0D52700A85933 /* Resources */,
+				F150230728D0D52700A85933 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F15022D928D0D52700A85933 /* PBXTargetDependency */,
+			);
+			name = "ExtensionPay Dev extension (macOS)";
+			productName = "ExtensionPay Dev extension (macOS)";
+			productReference = F15022C028D0D52700A85933 /* ExtensionPay Dev extension.app */;
+			productType = "com.apple.product-type.application";
+		};
+		F15022CB28D0D52700A85933 /* ExtensionPay Dev extension Extension (iOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F15022FD28D0D52700A85933 /* Build configuration list for PBXNativeTarget "ExtensionPay Dev extension Extension (iOS)" */;
+			buildPhases = (
+				F15022C828D0D52700A85933 /* Sources */,
+				F15022C928D0D52700A85933 /* Frameworks */,
+				F15022CA28D0D52700A85933 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "ExtensionPay Dev extension Extension (iOS)";
+			productName = "ExtensionPay Dev extension Extension (iOS)";
+			productReference = F15022CC28D0D52700A85933 /* ExtensionPay Dev extension Extension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		F15022D528D0D52700A85933 /* ExtensionPay Dev extension Extension (macOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F150230428D0D52700A85933 /* Build configuration list for PBXNativeTarget "ExtensionPay Dev extension Extension (macOS)" */;
+			buildPhases = (
+				F15022D228D0D52700A85933 /* Sources */,
+				F15022D328D0D52700A85933 /* Frameworks */,
+				F15022D428D0D52700A85933 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "ExtensionPay Dev extension Extension (macOS)";
+			productName = "ExtensionPay Dev extension Extension (macOS)";
+			productReference = F15022D628D0D52700A85933 /* ExtensionPay Dev extension Extension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F150229228D0D52100A85933 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1400;
+				LastUpgradeCheck = 1400;
+				TargetAttributes = {
+					F15022AD28D0D52600A85933 = {
+						CreatedOnToolsVersion = 14.0;
+					};
+					F15022BF28D0D52700A85933 = {
+						CreatedOnToolsVersion = 14.0;
+					};
+					F15022CB28D0D52700A85933 = {
+						CreatedOnToolsVersion = 14.0;
+					};
+					F15022D528D0D52700A85933 = {
+						CreatedOnToolsVersion = 14.0;
+					};
+				};
+			};
+			buildConfigurationList = F150229528D0D52100A85933 /* Build configuration list for PBXProject "ExtensionPay Dev extension" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = F150229128D0D52100A85933;
+			productRefGroup = F15022AF28D0D52600A85933 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				F15022AD28D0D52600A85933 /* ExtensionPay Dev extension (iOS) */,
+				F15022BF28D0D52700A85933 /* ExtensionPay Dev extension (macOS) */,
+				F15022CB28D0D52700A85933 /* ExtensionPay Dev extension Extension (iOS) */,
+				F15022D528D0D52700A85933 /* ExtensionPay Dev extension Extension (macOS) */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		F15022AC28D0D52600A85933 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F15022DF28D0D52700A85933 /* Icon.png in Resources */,
+				F15022B728D0D52600A85933 /* LaunchScreen.storyboard in Resources */,
+				F15022DD28D0D52700A85933 /* Main.html in Resources */,
+				F15022E328D0D52700A85933 /* Script.js in Resources */,
+				F15022E728D0D52700A85933 /* Assets.xcassets in Resources */,
+				F15022BA28D0D52600A85933 /* Main.storyboard in Resources */,
+				F15022E128D0D52700A85933 /* Style.css in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F15022BE28D0D52700A85933 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F15022E028D0D52700A85933 /* Icon.png in Resources */,
+				F15022E228D0D52700A85933 /* Style.css in Resources */,
+				F15022C628D0D52700A85933 /* Main.storyboard in Resources */,
+				F15022E428D0D52700A85933 /* Script.js in Resources */,
+				F15022E828D0D52700A85933 /* Assets.xcassets in Resources */,
+				F15022DE28D0D52700A85933 /* Main.html in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F15022CA28D0D52700A85933 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F15022F128D0D52700A85933 /* background.js in Resources */,
+				F15022F728D0D52700A85933 /* popup.css in Resources */,
+				F15022F528D0D52700A85933 /* popup.html in Resources */,
+				F15022ED28D0D52700A85933 /* images in Resources */,
+				F15022EF28D0D52700A85933 /* manifest.json in Resources */,
+				F150230C28D0DCA900A85933 /* ExtPay.js in Resources */,
+				F15022EB28D0D52700A85933 /* _locales in Resources */,
+				F15022F328D0D52700A85933 /* content.js in Resources */,
+				F15022F928D0D52700A85933 /* popup.js in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F15022D428D0D52700A85933 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F15022F228D0D52700A85933 /* background.js in Resources */,
+				F15022F828D0D52700A85933 /* popup.css in Resources */,
+				F15022F628D0D52700A85933 /* popup.html in Resources */,
+				F15022EE28D0D52700A85933 /* images in Resources */,
+				F15022F028D0D52700A85933 /* manifest.json in Resources */,
+				F150230D28D0DCA900A85933 /* ExtPay.js in Resources */,
+				F15022EC28D0D52700A85933 /* _locales in Resources */,
+				F15022F428D0D52700A85933 /* content.js in Resources */,
+				F15022FA28D0D52700A85933 /* popup.js in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		F15022AA28D0D52600A85933 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F15022E528D0D52700A85933 /* ViewController.swift in Sources */,
+				F15022B228D0D52600A85933 /* AppDelegate.swift in Sources */,
+				F15022B428D0D52600A85933 /* SceneDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F15022BC28D0D52700A85933 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F15022E628D0D52700A85933 /* ViewController.swift in Sources */,
+				F15022C328D0D52700A85933 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F15022C828D0D52700A85933 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F15022E928D0D52700A85933 /* SafariWebExtensionHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F15022D228D0D52700A85933 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F15022EA28D0D52700A85933 /* SafariWebExtensionHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		F15022CF28D0D52700A85933 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F15022CB28D0D52700A85933 /* ExtensionPay Dev extension Extension (iOS) */;
+			targetProxy = F15022CE28D0D52700A85933 /* PBXContainerItemProxy */;
+		};
+		F15022D928D0D52700A85933 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F15022D528D0D52700A85933 /* ExtensionPay Dev extension Extension (macOS) */;
+			targetProxy = F15022D828D0D52700A85933 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		F150229828D0D52200A85933 /* Main.html */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F150229928D0D52200A85933 /* Base */,
+			);
+			name = Main.html;
+			sourceTree = "<group>";
+		};
+		F15022B528D0D52600A85933 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F15022B628D0D52600A85933 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		F15022B828D0D52600A85933 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F15022B928D0D52600A85933 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		F15022C428D0D52700A85933 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F15022C528D0D52700A85933 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		F15022FB28D0D52700A85933 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		F15022FC28D0D52700A85933 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		F15022FE28D0D52700A85933 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 27QMGL6C5Y;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "iOS (Extension)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "ExtensionPay Dev extension Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.ExtensionPay.ExtensionPay-Dev-extension.Extension";
+				PRODUCT_NAME = "ExtensionPay Dev extension Extension";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		F15022FF28D0D52700A85933 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 27QMGL6C5Y;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "iOS (Extension)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "ExtensionPay Dev extension Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.ExtensionPay.ExtensionPay-Dev-extension.Extension";
+				PRODUCT_NAME = "ExtensionPay Dev extension Extension";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		F150230228D0D52700A85933 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 27QMGL6C5Y;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "iOS (App)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "ExtensionPay Dev extension";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.ExtensionPay.ExtensionPay-Dev-extension";
+				PRODUCT_NAME = "ExtensionPay Dev extension";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		F150230328D0D52700A85933 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 27QMGL6C5Y;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "iOS (App)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "ExtensionPay Dev extension";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.ExtensionPay.ExtensionPay-Dev-extension";
+				PRODUCT_NAME = "ExtensionPay Dev extension";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		F150230528D0D52700A85933 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "macOS (Extension)/ExtensionPay Dev extension.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 27QMGL6C5Y;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "macOS (Extension)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "ExtensionPay Dev extension Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.ExtensionPay.ExtensionPay-Dev-extension.Extension";
+				PRODUCT_NAME = "ExtensionPay Dev extension Extension";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		F150230628D0D52700A85933 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "macOS (Extension)/ExtensionPay Dev extension.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 27QMGL6C5Y;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "macOS (Extension)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "ExtensionPay Dev extension Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.ExtensionPay.ExtensionPay-Dev-extension.Extension";
+				PRODUCT_NAME = "ExtensionPay Dev extension Extension";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		F150230928D0D52700A85933 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "macOS (App)/ExtensionPay Dev extension.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 27QMGL6C5Y;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "ExtensionPay Dev extension";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.ExtensionPay.ExtensionPay-Dev-extension";
+				PRODUCT_NAME = "ExtensionPay Dev extension";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		F150230A28D0D52700A85933 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "macOS (App)/ExtensionPay Dev extension.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 27QMGL6C5Y;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "ExtensionPay Dev extension";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.ExtensionPay.ExtensionPay-Dev-extension";
+				PRODUCT_NAME = "ExtensionPay Dev extension";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		F150229528D0D52100A85933 /* Build configuration list for PBXProject "ExtensionPay Dev extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F15022FB28D0D52700A85933 /* Debug */,
+				F15022FC28D0D52700A85933 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F15022FD28D0D52700A85933 /* Build configuration list for PBXNativeTarget "ExtensionPay Dev extension Extension (iOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F15022FE28D0D52700A85933 /* Debug */,
+				F15022FF28D0D52700A85933 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F150230128D0D52700A85933 /* Build configuration list for PBXNativeTarget "ExtensionPay Dev extension (iOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F150230228D0D52700A85933 /* Debug */,
+				F150230328D0D52700A85933 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F150230428D0D52700A85933 /* Build configuration list for PBXNativeTarget "ExtensionPay Dev extension Extension (macOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F150230528D0D52700A85933 /* Debug */,
+				F150230628D0D52700A85933 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F150230828D0D52700A85933 /* Build configuration list for PBXNativeTarget "ExtensionPay Dev extension (macOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F150230928D0D52700A85933 /* Debug */,
+				F150230A28D0D52700A85933 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = F150229228D0D52100A85933 /* Project object */;
+}

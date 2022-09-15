@@ -1310,6 +1310,11 @@ You can copy and paste this to your manifest.json file to fix this error:
 	            ext_info = await browserPolyfill.management.getSelf();
 	        } else if (browserPolyfill.runtime) {
 	            ext_info = await browserPolyfill.runtime.sendMessage('extpay-extinfo'); // ask background page for ext info
+	            if (!ext_info) {
+	                // Safari doesn't support browser.management for some reason
+	                const is_dev_mode = !('update_url' in browserPolyfill.runtime.getManifest());
+	                ext_info = {installType: is_dev_mode ? 'development' : 'normal'};
+	            }
 	        } else {
 	            throw 'ExtPay needs to be run in a browser extension context'
 	        }
@@ -1542,7 +1547,7 @@ You can copy and paste this to your manifest.json file to fix this error:
 	                } else if (message == 'extpay-extinfo' && browserPolyfill.management) {
 	                    // get this message from content scripts which can't access browser.management
 	                    return browserPolyfill.management.getSelf()
-	                }
+	                } 
 	            });
 	        }
 	    }
