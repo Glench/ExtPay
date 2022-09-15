@@ -176,7 +176,7 @@ You can copy and paste this to your manifest.json file to fix this error:
     }
 
     async function open_popup(url, width, height) {
-        if (windows) {
+        if (windows && windows.create) {
             const current_window = await windows.getCurrent();
             // https://stackoverflow.com/a/68456858
             const left = Math.round((current_window.width - width) * 0.5 + current_window.left);
