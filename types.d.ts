@@ -28,6 +28,7 @@ declare module "extpay" {
       addListener: (cb: (user: User) => void) => void
     }
     openPaymentPage: () => Promise<void>
+    openLoginPage: () => Promise<void>
     openTrialPage: (displayText?: string) => Promise<void>
     onTrialStarted: {
       addListener: (cb: (user: User) => void) => void
