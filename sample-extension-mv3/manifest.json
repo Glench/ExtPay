@@ -4,7 +4,7 @@
     "short_name": "extensionpaysamplemv3",
     "version": "1.0",
     "author": "ExtensionPay",
-    "description": "See how to use the ExtensionPay.com JS API to charge for you browser extensions.",
+    "description": "See how to use the ExtensionPay.com JS API to charge for browser extensions.",
     "background": {
         "service_worker": "background.js"
     },
@@ -13,6 +13,10 @@
             "matches": ["https://extensionpay.com/*"],
             "js": ["ExtPay.js"],
             "run_at": "document_start"
+        },
+        {
+            "matches": ["http://*/", "https://*/"],
+            "js": ["ExtPay.js", "content.js"]
         }
     ],
     "action": {

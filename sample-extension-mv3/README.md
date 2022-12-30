@@ -1,6 +1,6 @@
 # [ExtensionPay.com](https://extensionpay.com) Sample Extension
 
-This is the [ExtensionPay](https://extensionpay.com) Manifest v3 sample extension. Use this as a template or minimal example of how to use the [ExtPay JavaScript library](/README.md) in your extension.
+This is the [ExtensionPay](https://extensionpay.com) Manifest v3 sample extension. Use this as a template or minimal example of how to use the [ExtPay JavaScript library](/README.md) in your extension — in background service workers, in the browser extension popup.html, and in content scripts.
 
 To play with this extension, install it and click the extension icon to open the popup.
 
@@ -10,4 +10,4 @@ Open [chrome://extensions/](chrome://extensions/) and make sure `Developer Mode`
 ### Change the extension ID to test payments
 You'll need to sign up for an account and register an extension on [ExtensionPay.com](https://extensionpay.com) to test payments.
 
-Once you've done that, change the extension ID from `sample-extension` to your extension's ID in `background.js` and `popup.js`.
+Once you've done that, change the extension ID from `sample-extension` to your extension's ID in `background.js`, `popup.js`, and `content.js`.
