@@ -1,5 +1,5 @@
-# ExtPay.js — Payments in browser extensions
-The JavaScript library for [ExtensionPay.com](https://extensionpay.com), a service to easily add payments to browser extensions. So far ExtensionPay has earned extension creators **over $200k and counting**!
+# ExtPay.js — Monetize browser extensions with payments
+The JavaScript library for [ExtensionPay.com](https://extensionpay.com), a service to easily add payments to browser extensions. So far ExtensionPay has earned extension creators **over $250k and counting**!
 
 ```js
 // Example code
