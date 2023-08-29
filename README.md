@@ -1,5 +1,5 @@
 # ExtPay.js — Monetize browser extensions with payments
-The JavaScript library for [ExtensionPay.com](https://extensionpay.com), a service to easily add payments to browser extensions. So far ExtensionPay has earned extension creators **over $250k and counting**!
+The JavaScript library for [ExtensionPay.com](https://extensionpay.com), a service to easily add payments to browser extensions. So far ExtensionPay has earned extension creators **over $300k and counting**!
 
 ```js
 // Example code
@@ -56,6 +56,8 @@ ExtPay needs the following configuration in your `manifest.json` (for both manif
 ```
 
 ExtPay will not show a scary permission warning when users try to install your extension.
+
+Note: For Firefox, you may have to include `"https://extensionpay.com/*"` in your extension manifest's "permission" for ExtPay to work properly.
 
 If you have a `"content_security_policy"` in your manifest or get a `Refused to connect to 'https://extensionpay.com...'` error, you'll have to add `connect-src https://extensionpay.com` to your extension's content security policy. <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/content_security_policy">See Mozilla's documentation for more details</a>.
 
