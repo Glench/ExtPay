@@ -104,3 +104,6 @@ typings/
 
 # TernJS port file
 .tern-port
+
+dev-extension-mv2/
+dev-extension-mv3/

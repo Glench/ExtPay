@@ -227,7 +227,7 @@ You can copy and paste this to your manifest.json file to fix this error:
         if (period) {
             url += `&period=${period}`;
         }
-        open_popup(url, 500, 650);
+        open_popup(url, 500, 700);
     }
     async function open_login_page() {
         var api_key = await get_key();
