@@ -176,7 +176,7 @@ Depending on how you configure your extension, users that have paid before can l
 
 ## 6. Use `extpay.onPaid.addListener()` to run code when the user pays
 
-If you want to run some code when your user pays, use `extpay.onPaid.addListener()`:
+If you want to run some code when your user pays for the first time, use `extpay.onPaid.addListener()`:
 
 ```js
 extpay.onPaid.addListener(user => {
