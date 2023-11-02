@@ -169,12 +169,15 @@ You can copy and paste this to your manifest.json file to fix this error:
         return parsed_user;
     }
 
-    async function payment_page_link() {
+    async function payment_page_link(plan_nickname) {
         var api_key = await get_key();
         if (!api_key) {
             api_key = await create_key();
         }
-        return `${EXTENSION_URL}?api_key=${api_key}`
+        if (plan_nickname) {
+            return `${EXTENSION_URL}/choose-plan/${plan_nickname}?api_key=${api_key}`
+        }
+        return `${EXTENSION_URL}/choose-plan?api_key=${api_key}`
     }
 
     async function open_popup(url, width, height) {
@@ -211,9 +214,9 @@ You can copy and paste this to your manifest.json file to fix this error:
         }
     }
 
-    async function open_payment_page() {
-        const url = await payment_page_link();
-        open_popup(url, 500, 800);
+    async function open_payment_page(plan_nickname) {
+        const url = await payment_page_link(plan_nickname);
+        browser.tabs.create({ url });
     }
 
     async function open_trial_page(period) {
