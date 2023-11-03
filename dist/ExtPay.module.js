@@ -130,7 +130,7 @@ You can copy and paste this to your manifest.json file to fix this error:
             }
         }
 
-        const resp = await fetch(`${EXTENSION_URL}/api/user?api_key=${api_key}`, {
+        const resp = await fetch(`${EXTENSION_URL}/api/v2/user?api_key=${api_key}`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -165,6 +165,20 @@ You can copy and paste this to your manifest.json file to fix this error:
         await set({extensionpay_user: user_data});
 
         return parsed_user;
+    }
+
+    async function get_plans() {
+        const resp = await fetch(`${EXTENSION_URL}/api/v2/current-plans`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-type': 'application/json',
+            },
+        });
+        if (!resp.ok) {
+            throw `ExtPay: HTTP error while getting plans. Received http code: ${resp.status}`
+        }
+        return await resp.json();
     }
 
     async function payment_page_link(plan_nickname) {
@@ -298,6 +312,7 @@ You can copy and paste this to your manifest.json file to fix this error:
             //     // TODO
             // }
         },
+        getPlans: get_plans,
         openPaymentPage: open_payment_page,
         openTrialPage: open_trial_page,
         openLoginPage: open_login_page,
