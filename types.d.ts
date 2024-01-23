@@ -31,13 +31,22 @@ declare module "extpay" {
     subscriptionCancelAt?: Date | null
   }
 
+  interface Plan {
+    unitAmountCents: number;
+    currency: string;
+    nickname: string | null;
+    interval: 'month' | 'year' | 'once';
+    intervalCount: number | null;
+  }
+    
+
   interface ExtPay {
     getUser: () => Promise<User>
     getPlans: () => Promise<Plan[]>
     onPaid: {
       addListener: (cb: (user: User) => void) => void
     }
-    openPaymentPage: (planNickname?:string) => Promise<void>
+    openPaymentPage: (planNickname?: string) => Promise<void>
     openLoginPage: () => Promise<void>
     openTrialPage: (displayText?: string) => Promise<void>
     onTrialStarted: {

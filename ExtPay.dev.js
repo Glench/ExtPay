@@ -183,17 +183,6 @@ You can copy and paste this to your manifest.json file to fix this error:
         return await resp.json();
     }
 
-    async function payment_page_link(plan_nickname) {
-        var api_key = await get_key();
-        if (!api_key) {
-            api_key = await create_key();
-        }
-        if (plan_nickname) {
-            return `${EXTENSION_URL}/choose-plan/${plan_nickname}?api_key=${api_key}`
-        }
-        return `${EXTENSION_URL}/choose-plan?api_key=${api_key}`
-    }
-
     async function open_popup(url, width, height) {
         if (browser.windows && browser.windows.create) {
             const current_window = await browser.windows.getCurrent()
@@ -229,8 +218,15 @@ You can copy and paste this to your manifest.json file to fix this error:
     }
 
     async function open_payment_page(plan_nickname) {
-        const url = await payment_page_link(plan_nickname)
-        browser.tabs.create({ url })
+        var api_key = await get_key();
+        if (!api_key) {
+            api_key = await create_key();
+        }
+        let url = `${EXTENSION_URL}/choose-plan?api_key=${api_key}`
+        if (plan_nickname) {
+            url = `${EXTENSION_URL}/choose-plan/${plan_nickname}?api_key=${api_key}`
+        }
+        await browser.tabs.create({url, active: true})
     }
 
     async function open_trial_page(period) {
@@ -277,6 +273,9 @@ You can copy and paste this to your manifest.json file to fix this error:
     return {
         getUser: function() {
             return fetch_user()
+        },
+        getPlans: function() {
+            return get_plans()
         },
         onPaid: {
             addListener: function(callback) {
