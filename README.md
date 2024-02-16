@@ -1,5 +1,5 @@
-# ExtPay.js — Payments in browser extensions
-The JavaScript library for [ExtensionPay.com](https://extensionpay.com), a service to easily add payments to browser extensions.
+# ExtPay.js — Monetize browser extensions with payments
+The JavaScript library for [ExtensionPay.com](https://extensionpay.com), a service to easily add payments to browser extensions. So far ExtensionPay has earned extension creators **over $300k and counting**!
 
 ```js
 // Example code
@@ -17,6 +17,8 @@ extpay.getUser().then(user => {
 ```
 
 Below are directions for using this library in your browser extension. If you learn better by example, you can also view the code for a **[sample extension](sample-extension-mv3/)**. This library uses [Mozilla's webextension-polyfill library](https://github.com/mozilla/webextension-polyfill) internally for compatability across browsers which means it should work on almost all modern browsers.
+
+> "It hasn't even been 1 year yet and I'm already going to **pass $4,000 in annual subscriptions on an extension that I never in a million years thought I would be able to make a penny from**. Thanks so much for creating this tool! I would not have even tried to monetize if I had to use Stripe directly, and you made it so easy. **It took less than an hour to set it up and test it**. Definitely have plans to create more extensions now that I know how **easy it is to monetize them**." - David, Neobuyer extension
 
   1. [Install](#1-install)
   2. [Configure your `manifest.json`](#2-configure-your-manifestjson)
@@ -54,6 +56,8 @@ ExtPay needs the following configuration in your `manifest.json` (for both manif
 ```
 
 ExtPay will not show a scary permission warning when users try to install your extension.
+
+Note: For Firefox, you may have to include `"https://extensionpay.com/*"` in your extension manifest's "permission" for ExtPay to work properly.
 
 If you have a `"content_security_policy"` in your manifest or get a `Refused to connect to 'https://extensionpay.com...'` error, you'll have to add `connect-src https://extensionpay.com` to your extension's content security policy. <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/content_security_policy">See Mozilla's documentation for more details</a>.
 
@@ -172,7 +176,7 @@ Depending on how you configure your extension, users that have paid before can l
 
 ## 6. Use `extpay.onPaid.addListener()` to run code when the user pays
 
-If you want to run some code when your user pays, use `extpay.onPaid.addListener()`:
+If you want to run some code when your user pays for the first time, use `extpay.onPaid.addListener()`:
 
 ```js
 extpay.onPaid.addListener(user => {
