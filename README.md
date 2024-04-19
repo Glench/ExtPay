@@ -1,4 +1,4 @@
-# THIS IS A BETA RELEASE, PLEASE DO NOT USE
+# THIS IS A BETA RELEASE, PLEASE DO NOT USE UNLESS YOU'VE BEEN EXPLICITLY ASKED TO
 # ExtPay.js — Payments in browser extensions
 The JavaScript library for [ExtensionPay.com](https://extensionpay.com), a service to easily add payments to browser extensions.
 
