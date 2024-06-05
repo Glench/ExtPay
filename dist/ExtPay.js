@@ -1455,7 +1455,11 @@ You can copy and paste this to your manifest.json file to fix this error:
 	        if (plan_nickname) {
 	            url = `${EXTENSION_URL}/choose-plan/${plan_nickname}?api_key=${api_key}`;
 	        }
-	        await browserPolyfill.tabs.create({url, active: true});
+	        if (browserPolyfill.tabs && browserPolyfill.tabs.create) {
+	            await browserPolyfill.tabs.create({url, active: true});
+	        } else {
+	            window.open(url, '_blank');
+	        }
 	    }
 
 	    async function open_trial_page(period) {

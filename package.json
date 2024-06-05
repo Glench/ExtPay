@@ -1,6 +1,6 @@
 {
   "name": "extpay",
-  "version": "4.0.0-beta2",
+  "version": "4.0.0-beta3",
   "description": "The JavaScript library for https://extensionpay.com - payments for browser extensions, no server needed.",
   "main": "./dist/ExtPay.common.js",
   "module": "./dist/ExtPay.module.js",
