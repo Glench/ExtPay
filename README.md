@@ -40,7 +40,7 @@ If you like this library, please star it! ⭐️ It helps us out :)
 Copy the [dist/ExtPay.js](dist/ExtPay.js) file into your project, or, if you're using a bundler (like Webpack or Rollup):
 
 ```bash
-npm install extpay --save
+npm install extpay@beta --save
 ```
 
 
