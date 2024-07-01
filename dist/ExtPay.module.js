@@ -1,4 +1,4 @@
-import { management, runtime, storage, tabs, windows } from 'webextension-polyfill';
+import * as browser from 'webextension-polyfill';
 
 // Sign up at https://extensionpay.com to use this library. AGPLv3 licensed.
 
@@ -11,7 +11,7 @@ if (typeof window !== 'undefined') {
         if (event.source != window) return;
         if (event.data === 'fetch-user' || event.data === 'trial-start') {
             window.postMessage(`${event.data}-received`);
-            runtime.sendMessage(event.data);
+            browser.runtime.sendMessage(event.data);
         }
     }, false);
 }
@@ -26,23 +26,23 @@ function ExtPay(extension_id) {
     }
     async function get(key) {
         try {
-            return await storage.sync.get(key)
+            return await browser.storage.sync.get(key)
         } catch(e) {
             // if sync not available (like with Firefox temp addons), fall back to local
-            return await storage.local.get(key)
+            return await browser.storage.local.get(key)
         }
     }
     async function set(dict) {
         try {
-            return await storage.sync.set(dict)
+            return await browser.storage.sync.set(dict)
         } catch(e) {
             // if sync not available (like with Firefox temp addons), fall back to local
-            return await storage.local.set(dict)
+            return await browser.storage.local.set(dict)
         }
     }
 
     // ----- start configuration checks
-    management && management.getSelf().then(async (ext_info) => {
+    browser.management && browser.management.getSelf().then(async (ext_info) => {
         if (!ext_info.permissions.includes('storage')) {
             var permissions = ext_info.hostPermissions.concat(ext_info.permissions);
             throw `ExtPay Setup Error: please include the "storage" permission in manifest.json["permissions"] or else ExtensionPay won't work correctly.
@@ -76,13 +76,13 @@ You can copy and paste this to your manifest.json file to fix this error:
     async function create_key() {
         var body = {};
         var ext_info;
-        if (management) {
-            ext_info = await management.getSelf();
-        } else if (runtime) {
-            ext_info = await runtime.sendMessage('extpay-extinfo'); // ask background page for ext info
+        if (browser.management) {
+            ext_info = await browser.management.getSelf();
+        } else if (browser.runtime) {
+            ext_info = await browser.runtime.sendMessage('extpay-extinfo'); // ask background page for ext info
             if (!ext_info) {
                 // Safari doesn't support browser.management for some reason
-                const is_dev_mode = !('update_url' in runtime.getManifest());
+                const is_dev_mode = !('update_url' in browser.runtime.getManifest());
                 ext_info = {installType: is_dev_mode ? 'development' : 'normal'};
             }
         } else {
@@ -183,13 +183,13 @@ You can copy and paste this to your manifest.json file to fix this error:
     }
 
     async function open_popup(url, width, height) {
-        if (windows && windows.create) {
-            const current_window = await windows.getCurrent();
+        if (browser.windows && browser.windows.create) {
+            const current_window = await browser.windows.getCurrent();
             // https://stackoverflow.com/a/68456858
             const left = Math.round((current_window.width - width) * 0.5 + current_window.left);
             const top = Math.round((current_window.height - height) * 0.5 + current_window.top);
             try {
-                windows.create({
+                browser.windows.create({
                     url: url,
                     type: "popup",
                     focused: true,
@@ -200,7 +200,7 @@ You can copy and paste this to your manifest.json file to fix this error:
                 });
             } catch(e) {
                 // firefox doesn't support 'focused'
-                windows.create({
+                browser.windows.create({
                     url: url,
                     type: "popup",
                     width,
@@ -225,8 +225,8 @@ You can copy and paste this to your manifest.json file to fix this error:
         if (plan_nickname) {
             url = `${EXTENSION_URL}/choose-plan/${plan_nickname}?api_key=${api_key}`;
         }
-        if (tabs && tabs.create) {
-            await tabs.create({url, active: true});
+        if (browser.tabs && browser.tabs.create) {
+            await browser.tabs.create({url, active: true});
         } else {
             window.open(url, '_blank');
         }
@@ -288,7 +288,7 @@ You can copy and paste this to your manifest.json file to fix this error:
             "js": ["ExtPay.js"],
             "run_at": "document_start"
         }]`;
-                const manifest = runtime.getManifest();
+                const manifest = browser.runtime.getManifest();
                 if (!manifest.content_scripts) {
                     throw `ExtPay setup error: To use the onPaid callback handler, please include ExtPay as a content script in your manifest.json. You can copy the example below into your manifest.json or check the docs: https://github.com/Glench/ExtPay#2-configure-your-manifestjson
 
@@ -326,7 +326,7 @@ You can copy and paste this to your manifest.json file to fix this error:
             }
         },
         startBackground: function() {
-            runtime.onMessage.addListener(function(message, sender, send_response) {
+            browser.runtime.onMessage.addListener(function(message, sender, send_response) {
                 console.log('service worker got message! Here it is:', message);
                 if (message == 'fetch-user') {
                     // Only called via extensionpay.com/extension/[extension-id]/paid -> content_script when user successfully pays.
@@ -335,13 +335,13 @@ You can copy and paste this to your manifest.json file to fix this error:
                 } else if (message == 'trial-start') {
                     // no need to poll since the trial confirmation page has already set trialStartedAt
                     fetch_user(); 
-                } else if (message == 'extpay-extinfo' && management) {
+                } else if (message == 'extpay-extinfo' && browser.management) {
                     // get this message from content scripts which can't access browser.management
-                    return management.getSelf()
+                    return browser.management.getSelf()
                 } 
             });
         }
     }
 }
 
-export default ExtPay;
+export { ExtPay as default };
