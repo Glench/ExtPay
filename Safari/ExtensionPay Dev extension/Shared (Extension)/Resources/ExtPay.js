@@ -1577,4 +1577,4 @@ You can copy and paste this to your manifest.json file to fix this error:
 
 	return ExtPay;
 
-}());
+})();
