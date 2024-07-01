@@ -12,6 +12,7 @@ if (typeof window !== 'undefined') {
         if (event.origin !== 'https://extensionpay.com') return;
         if (event.source != window) return;
         if (event.data === 'fetch-user' || event.data === 'trial-start') {
+            window.postMessage(`${event.data}-received`);
             browser.runtime.sendMessage(event.data);
         }
     }, false);
