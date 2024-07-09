@@ -283,6 +283,9 @@ extpay.getUser().then(user => {
         // user's trial is not active
     }
 })
+
+After users start a trial, the user object will have the `trialStartedAt` property populated. If users uninstall and reinstall your extension and then attempt to start a new trial using the same email they previously used, they will be instantly "logged in" to their existing free trial without needing to confirm instead of starting a new trial or being rejected. Their `trialStartedAt` will be the same. If this is confusing, please try it out in development!
+
 ```
 
 Note that `extpay.openTrialPage(displayText)` takes an optional string argument that is displayed to the user on the trial page. For example, `extpay.openTrialPage('7-day')` would change the trial prompt from `Enter an email to start your free trial` to `Enter an email to start your *7-day* free trial`. This is meant to give your users a better idea of what they're signing up for.
