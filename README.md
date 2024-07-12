@@ -173,6 +173,7 @@ While testing, use your ExtensionPay email to test payments without entering cre
 
 Depending on how you configure your extension, users that have paid before can log in to activate their paid features on different browsers, profiles, or after uninstalling/reinstalling.
 
+Make sure not to skip step 7 to let the users cancel the subscription should they wish to do so!
 
 ## 6. Use `extpay.onPaid.addListener()` to run code when the user pays
 
@@ -205,9 +206,9 @@ You can add as many callback functions as you want.
 Note: `onPaid` callbacks will be called after a user pays as well as after a user "logs in" (e.g. activates their paid account on a different browser/profile/install). This may change in the future -- if you'd like this to work differently, please contact me with a detailed explanation of your use case :)
 
 
-## 7. Use `extpay.openPaymentPage()` to let the user manage their subscription preferences
+## 7. Use `extpay.openPaymentPage()` to let the user cancel the subscription and manage preferences
 
-If your extension is configured for subscription payments, you can let the user manage their subscription from within the extension with the same function you used to let them pay:
+If your extension is configured for subscription payments, you need to make sure to let the user cancel their subscription and manage preferences from within the extension, with the same function you used to let them pay:
 
 ```js
 extpay.openPaymentPage()
