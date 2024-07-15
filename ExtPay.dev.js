@@ -252,7 +252,7 @@ You can copy and paste this to your manifest.json file to fix this error:
         if (!api_key) {
             api_key = await create_key();
         }
-        const url = `${EXTENSION_URL}/reactivate?api_key=${api_key}&v2`
+        const url = `${EXTENSION_URL}/reactivate?api_key=${api_key}&back=choose-plan`
         open_popup(url, 500, 800)
     }
 
