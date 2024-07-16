@@ -27,7 +27,7 @@ Below are directions for using this library in your browser extension. If you le
   5. [Use `extpay.openPaymentPage()` to let the user pay](#5-use-extpayopenpaymentpage-to-let-the-user-pay)
   6. [Use `extpay.getPlans()` to list available payment plans](#6-use-extpaygetplans-to-list-available-payment-plans)
   7. [Use `extpay.onPaid.addListener()` to run code when the user pays](#7-use-extpayonpaidaddlistener-to-run-code-when-the-user-pays)
-  8. [Use `extpay.openPaymentPage()` to let the user manage their subscription preferences](#8-use-extpayopenpaymentpage-to-let-the-user-manage-their-subscription-preferences)
+  8. [Use `extpay.openPaymentPage()` to let the user manage their subscription](#8-use-extpayopenpaymentpage-to-let-the-user-manage-their-subscription)
   9. [Use `extpay.openTrialPage()` to let the user sign up for a free trial](#9-use-extpayopentrialpage-to-let-the-user-sign-up-for-a-free-trial)
   10. [Use `extpay.openLoginPage()` to let the user log in if they've paid already](#10-use-extpayopenloginpage-to-let-the-user-log-in-if-theyve-paid-already)
 
@@ -247,9 +247,9 @@ You can add as many callback functions as you want.
 Note: `onPaid` callbacks will be called after a user pays as well as after a user "logs in" (e.g. activates their paid account on a different browser/profile/install). This may change in the future -- if you'd like this to work differently, please contact me with a detailed explanation of your use case :)
 
 
-## 8. Use `extpay.openPaymentPage()` to let the user manage their subscription preferences
+## 8. Use `extpay.openPaymentPage()` to let the user manage their subscription
 
-If your extension is configured for subscription payments, you can let the user manage their subscription from within the extension with the same function you used to let them pay:
+If your extension is configured for subscription payments, you should let the user manage/cancel their subscription from within the extension with the same function you used to let them pay:
 
 ```js
 extpay.openPaymentPage()
@@ -258,6 +258,8 @@ extpay.openPaymentPage()
 The subscription management page looks something like this:
 
 <img src="docs/subscription_management_screenshot.png" alt="Screenshot of example subscription management page." width="400"> 
+
+Obviously you should allow your users to access this page in order to cancel their subscription!
 
 Note: please read the **[detailed docs on subscriptions here](/docs/how_subscriptions_work.md)**.
 
