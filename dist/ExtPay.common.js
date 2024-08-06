@@ -349,7 +349,6 @@ You can copy and paste this to your manifest.json file to fix this error:
         },
         startBackground: function() {
             browser__namespace.runtime.onMessage.addListener(function(message, sender, send_response) {
-                console.log('service worker got message! Here it is:', message);
                 if (message == 'fetch-user') {
                     // Only called via extensionpay.com/extension/[extension-id]/paid -> content_script when user successfully pays.
                     // It's possible attackers could trigger this but that is basically harmless. It would just query the user.
