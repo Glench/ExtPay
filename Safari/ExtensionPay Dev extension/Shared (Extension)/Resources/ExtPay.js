@@ -1481,7 +1481,7 @@ You can copy and paste this to your manifest.json file to fix this error:
 	        if (!api_key) {
 	            api_key = await create_key();
 	        }
-	        const url = `${EXTENSION_URL}/reactivate?api_key=${api_key}&back=choose-plan`;
+	        const url = `${EXTENSION_URL}/reactivate?api_key=${api_key}&back=choose-plan&v2`;
 	        open_popup(url, 500, 800);
 	    }
 
@@ -1558,7 +1558,6 @@ You can copy and paste this to your manifest.json file to fix this error:
 	        },
 	        startBackground: function() {
 	            browserPolyfill.runtime.onMessage.addListener(function(message, sender, send_response) {
-	                console.log('service worker got message! Here it is:', message);
 	                if (message == 'fetch-user') {
 	                    // Only called via extensionpay.com/extension/[extension-id]/paid -> content_script when user successfully pays.
 	                    // It's possible attackers could trigger this but that is basically harmless. It would just query the user.
