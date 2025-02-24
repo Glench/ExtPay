@@ -158,21 +158,27 @@ The `user` object returned from `extpay.getUser()` has the following properties:
 
 Opens a new browser tab where the user can pay to upgrade their status.
 ```js
-extpay.openPaymentPage()
+extpay.openPaymentPage([planNickname])
 ```
 The payment page looks like this:
 
-![popup screenshot](docs/popup_screenshot.png)
+![Payment plan choosing page](docs/plan_choosing_screenshot.png)
+
+The plan buttons take you to a Stripe Checkout page:
+
+![Screenshot of Stripe Checkout page](docs/stripe_checkout.png)
 
 Note: `extpay.openPaymentPage()` can fail to open the tab if there is a network error. Please consider this possibility in your code.
 
-You can optionally include your `planNickname` as an argument to `extpay.openPaymentPage()` to directly open the Stripe payment page for that plan. For example: `extpay.openPaymentPage('my_plan_nickname')`. Plan nicknames can be edited in the ExtensionPay.com extension settings page. 
+You can optionally include your `planNickname` as an argument to `extpay.openPaymentPage(planNickname)` to directly open the Stripe payment page for that plan. For example: `extpay.openPaymentPage('my_plan_nickname')`. Plan nicknames can be edited in the ExtensionPay.com extension settings page. 
+
+While developing your extension in test mode, you will need to enter your account password in order to proceed to the Stripe Checkout page. Once there, you can use [Stripe's test cards](https://docs.stripe.com/testing) in order to test the payment experience.
 
 It is best to open the payment page when the user has a clear idea of what they're paying for.
 
-While testing, use your ExtensionPay email to test payments without entering credit card information. Reinstall the extension to reset back to an unpaid user.
-
 Depending on how you configure your extension, users that have paid before can log in to activate their paid features on different browsers, profiles, or after uninstalling/reinstalling.
+
+You should turn on as many [payment methods in your Stripe settings](https://dashboard.stripe.com/settings/payment_methods) as possible to maximize your revenue.
 
 ## 6. Use `extpay.getPlans()` to list available payment plans
 
