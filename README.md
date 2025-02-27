@@ -174,7 +174,7 @@ Note: `extpay.openPaymentPage()` can fail to open the tab if there is a network 
 
 You can optionally include your `planNickname` as an argument to `extpay.openPaymentPage(planNickname)` to directly open the Stripe payment page for that plan. For example: `extpay.openPaymentPage('my_plan_nickname')`. Plan nicknames can be edited in the ExtensionPay.com extension settings page. 
 
-While developing your extension in test mode, you will need to enter your account password in order to proceed to the Stripe Checkout page. Once there, you can use [Stripe's test cards](https://docs.stripe.com/testing) in order to test the payment experience.
+While developing your extension in test mode, you will need to enter your account password in order to proceed to the Stripe Checkout page. This is to prevent fraudulent access to your extension. You can use [Stripe's test cards](https://docs.stripe.com/testing) in order to test the payment experience in development.
 
 It is best to open the payment page when the user has a clear idea of what they're paying for.
 
