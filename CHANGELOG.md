@@ -4,8 +4,12 @@ This changelog includes both changes in the client-side ExtPay.js library as wel
 
 ### ExtPay 3.1.0
 * Extensions can now have multiple payment plans for a user to choose from. Plans are created in the extension editing page on extensionpay.com. When `extpay.openPaymentPage()` is called, a new full-screen page will open with buttons to choose between plans. There's an optional `planNickname` parameter that can be used to open directly to the Stripe Checkout page when calling `extpay.openPaymentPage()`. `extpay.getPlans()` is also available if you don't want to use ExtPay's plan choosing page.
-* Stripe Checkout is now used. This allows the use of more payment methods as well as coupon codes and increases conversion rates. It also means developers can make test payments using Stripe's test cards when developing their extensions.
-* The developer experience has been improved. Now developers can simply click the "reset" button and input a password in order to reset their extension to a pre-trial pre-paid state instead of uninstalling and reinstalling their extension.
+* Stripe Checkout is now used. This allows more payment methods as well as coupon codes and increases conversion rates. It also means developers can make test payments using Stripe's test cards when developing their extensions.
+* The developer experience has been improved. Now developers can simply click the "reset" link and input a password in order to reset their extension to a pre-trial pre-paid state instead of uninstalling and reinstalling their extension.
+
+### ExtensionPay.com March 2025
+* Separately from the new version of ExtPay, we also made backend infrastructure upgrades that should allow ExtensionPay to scale beautifully if needed.
+* Just wanted to say that I'm extremely grateful for all ExtensionPay customers. By and large you've been very kind, understanding, grateful, and overall positive and that is such a gift to me and makes developing the service much more enjoyable than otherwise. Thanks so much!
 
 ### ExtensionPay.com February 2025
 * Fixed a bug where a developer using their extension in test mode with their dev credentials would receive an incorrect API response after using the "log in" function.
