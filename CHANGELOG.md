@@ -3,7 +3,7 @@ ChangeLog
 This changelog includes both changes in the client-side ExtPay.js library as well as the online service.
 
 ### ExtPay 3.1.0
-* Added the option to have multiple payment plans in extennsions. Plans are created in the extension editing page on extensionpay.com. When `extpay.openPaymentPage()` is called, a new full-screen page will open with buttons to choose between plans. There's an optional `planNickname` parameter that can be used to open directly to the Stripe Checkout page when calling `extpay.openPaymentPage()`. `extpay.getPlans()` is also available if you don't want to use ExtPay's plan choosing page.
+* Added the option to have multiple payment plans in extensions. Plans are created in the extension editing page on extensionpay.com. When `extpay.openPaymentPage()` is called, a new full-screen page will open with buttons to choose between plans. There's an optional `planNickname` parameter that can be used to open directly to the Stripe Checkout page when calling `extpay.openPaymentPage()`. `extpay.getPlans()` is also available if you don't want to use ExtPay's plan choosing page.
 * Stripe Checkout is now used. This allows more payment methods as well as coupon codes and increases conversion rates. It also means developers can make test payments using Stripe's test cards when developing their extensions.
 * The developer experience has been improved. Now developers can simply click the "reset" link and input a password in order to reset their extension to a pre-trial pre-paid state instead of uninstalling and reinstalling their extension.
 
