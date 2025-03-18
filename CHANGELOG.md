@@ -1,5 +1,5 @@
-ChangeLog
-==========
+Changelog
+=========
 This changelog includes both changes in the client-side ExtPay.js library as well as the online service.
 
 ### ExtPay 3.1.0
