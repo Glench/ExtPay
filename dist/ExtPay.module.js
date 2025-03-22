@@ -277,9 +277,6 @@ You can copy and paste this to your manifest.json file to fix this error:
         getUser: function() {
             return fetch_user()
         },
-        getPlans: function() {
-            return get_plans()
-        },
         onPaid: {
             addListener: function(callback) {
                 const content_script_template = `"content_scripts": [
