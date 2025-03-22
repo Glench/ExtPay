@@ -1,4 +1,4 @@
-import { management, runtime, storage, windows } from 'webextension-polyfill';
+import * as browser from 'webextension-polyfill';
 
 // Sign up at https://extensionpay.com to use this library. AGPLv3 licensed.
 
@@ -9,8 +9,9 @@ if (typeof window !== 'undefined') {
     window.addEventListener('message', (event) => {
         if (event.origin !== 'https://extensionpay.com') return;
         if (event.source != window) return;
-        if (event.data === 'fetch-user' || event.data === 'trial-start') {
-            runtime.sendMessage(event.data);
+        if (event.data === 'extpay-fetch-user' || event.data === 'extpay-trial-start') {
+            window.postMessage(`${event.data}-received`);
+            browser.runtime.sendMessage(event.data);
         }
     }, false);
 }
@@ -25,23 +26,23 @@ function ExtPay(extension_id) {
     }
     async function get(key) {
         try {
-            return await storage.sync.get(key)
+            return await browser.storage.sync.get(key)
         } catch(e) {
             // if sync not available (like with Firefox temp addons), fall back to local
-            return await storage.local.get(key)
+            return await browser.storage.local.get(key)
         }
     }
     async function set(dict) {
         try {
-            return await storage.sync.set(dict)
+            return await browser.storage.sync.set(dict)
         } catch(e) {
             // if sync not available (like with Firefox temp addons), fall back to local
-            return await storage.local.set(dict)
+            return await browser.storage.local.set(dict)
         }
     }
 
     // ----- start configuration checks
-    management && management.getSelf().then(async (ext_info) => {
+    browser.management && browser.management.getSelf().then(async (ext_info) => {
         if (!ext_info.permissions.includes('storage')) {
             var permissions = ext_info.hostPermissions.concat(ext_info.permissions);
             throw `ExtPay Setup Error: please include the "storage" permission in manifest.json["permissions"] or else ExtensionPay won't work correctly.
@@ -75,13 +76,13 @@ You can copy and paste this to your manifest.json file to fix this error:
     async function create_key() {
         var body = {};
         var ext_info;
-        if (management) {
-            ext_info = await management.getSelf();
-        } else if (runtime) {
-            ext_info = await runtime.sendMessage('extpay-extinfo'); // ask background page for ext info
+        if (browser.management) {
+            ext_info = await browser.management.getSelf();
+        } else if (browser.runtime) {
+            ext_info = await browser.runtime.sendMessage('extpay-extinfo'); // ask background page for ext info
             if (!ext_info) {
                 // Safari doesn't support browser.management for some reason
-                const is_dev_mode = !('update_url' in runtime.getManifest());
+                const is_dev_mode = !('update_url' in browser.runtime.getManifest());
                 ext_info = {installType: is_dev_mode ? 'development' : 'normal'};
             }
         } else {
@@ -130,7 +131,7 @@ You can copy and paste this to your manifest.json file to fix this error:
             }
         }
 
-        const resp = await fetch(`${EXTENSION_URL}/api/user?api_key=${api_key}`, {
+        const resp = await fetch(`${EXTENSION_URL}/api/v2/user?api_key=${api_key}`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -167,22 +168,28 @@ You can copy and paste this to your manifest.json file to fix this error:
         return parsed_user;
     }
 
-    async function payment_page_link() {
-        var api_key = await get_key();
-        if (!api_key) {
-            api_key = await create_key();
+    async function get_plans() {
+        const resp = await fetch(`${EXTENSION_URL}/api/v2/current-plans`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-type': 'application/json',
+            },
+        });
+        if (!resp.ok) {
+            throw `ExtPay: HTTP error while getting plans. Received http code: ${resp.status}`
         }
-        return `${EXTENSION_URL}?api_key=${api_key}`
+        return await resp.json();
     }
 
     async function open_popup(url, width, height) {
-        if (windows && windows.create) {
-            const current_window = await windows.getCurrent();
+        if (browser.windows && browser.windows.create) {
+            const current_window = await browser.windows.getCurrent();
             // https://stackoverflow.com/a/68456858
             const left = Math.round((current_window.width - width) * 0.5 + current_window.left);
             const top = Math.round((current_window.height - height) * 0.5 + current_window.top);
             try {
-                windows.create({
+                browser.windows.create({
                     url: url,
                     type: "popup",
                     focused: true,
@@ -193,7 +200,7 @@ You can copy and paste this to your manifest.json file to fix this error:
                 });
             } catch(e) {
                 // firefox doesn't support 'focused'
-                windows.create({
+                browser.windows.create({
                     url: url,
                     type: "popup",
                     width,
@@ -209,9 +216,20 @@ You can copy and paste this to your manifest.json file to fix this error:
         }
     }
 
-    async function open_payment_page() {
-        const url = await payment_page_link();
-        open_popup(url, 500, 800);
+    async function open_payment_page(plan_nickname) {
+        var api_key = await get_key();
+        if (!api_key) {
+            api_key = await create_key();
+        }
+        let url = `${EXTENSION_URL}/choose-plan?api_key=${api_key}`;
+        if (plan_nickname) {
+            url = `${EXTENSION_URL}/choose-plan/${plan_nickname}?api_key=${api_key}`;
+        }
+        if (browser.tabs && browser.tabs.create) {
+            await browser.tabs.create({url, active: true});
+        } else {
+            window.open(url, '_blank');
+        }
     }
 
     async function open_trial_page(period) {
@@ -232,7 +250,7 @@ You can copy and paste this to your manifest.json file to fix this error:
         if (!api_key) {
             api_key = await create_key();
         }
-        const url = `${EXTENSION_URL}/reactivate?api_key=${api_key}`;
+        const url = `${EXTENSION_URL}/reactivate?api_key=${api_key}&back=choose-plan&v2`;
         open_popup(url, 500, 800);
     }
 
@@ -259,6 +277,9 @@ You can copy and paste this to your manifest.json file to fix this error:
         getUser: function() {
             return fetch_user()
         },
+        getPlans: function() {
+            return get_plans()
+        },
         onPaid: {
             addListener: function(callback) {
                 const content_script_template = `"content_scripts": [
@@ -267,7 +288,7 @@ You can copy and paste this to your manifest.json file to fix this error:
             "js": ["ExtPay.js"],
             "run_at": "document_start"
         }]`;
-                const manifest = runtime.getManifest();
+                const manifest = browser.runtime.getManifest();
                 if (!manifest.content_scripts) {
                     throw `ExtPay setup error: To use the onPaid callback handler, please include ExtPay as a content script in your manifest.json. You can copy the example below into your manifest.json or check the docs: https://github.com/Glench/ExtPay#2-configure-your-manifestjson
 
@@ -295,6 +316,7 @@ You can copy and paste this to your manifest.json file to fix this error:
             //     // TODO
             // }
         },
+        getPlans: get_plans,
         openPaymentPage: open_payment_page,
         openTrialPage: open_trial_page,
         openLoginPage: open_login_page,
@@ -304,22 +326,21 @@ You can copy and paste this to your manifest.json file to fix this error:
             }
         },
         startBackground: function() {
-            runtime.onMessage.addListener(function(message, sender, send_response) {
-                console.log('service worker got message! Here it is:', message);
-                if (message == 'fetch-user') {
+            browser.runtime.onMessage.addListener(function(message, sender, send_response) {
+                if (message == 'extpay-fetch-user') {
                     // Only called via extensionpay.com/extension/[extension-id]/paid -> content_script when user successfully pays.
                     // It's possible attackers could trigger this but that is basically harmless. It would just query the user.
                     poll_user_paid();
-                } else if (message == 'trial-start') {
+                } else if (message == 'extpay-trial-start') {
                     // no need to poll since the trial confirmation page has already set trialStartedAt
                     fetch_user(); 
-                } else if (message == 'extpay-extinfo' && management) {
+                } else if (message == 'extpay-extinfo' && browser.management) {
                     // get this message from content scripts which can't access browser.management
-                    return management.getSelf()
+                    return browser.management.getSelf()
                 } 
             });
         }
     }
 }
 
-export default ExtPay;
+export { ExtPay as default };

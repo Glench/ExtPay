@@ -26,10 +26,11 @@ Below are directions for using this library in your browser extension. If you le
   4. [Use `extpay.getUser()` to check a user's paid status](#4-use-extpaygetuser-to-check-a-users-paid-status)
       * [`user` object properties](#user-object-properties)
   5. [Use `extpay.openPaymentPage()` to let the user pay](#5-use-extpayopenpaymentpage-to-let-the-user-pay)
-  6. [Use `extpay.onPaid.addListener()` to run code when the user pays](#6-use-extpayonpaidaddlistener-to-run-code-when-the-user-pays)
-  7. [Use `extpay.openPaymentPage()` to let the user manage their subscription preferences](#7-use-extpayopenpaymentpage-to-let-the-user-manage-their-subscription-preferences)
-  8. [Use `extpay.openTrialPage()` to let the user sign up for a free trial](#8-use-extpayopentrialpage-to-let-the-user-sign-up-for-a-free-trial)
-  9. [Use `extpay.openLoginPage()` to let the user log in if they've paid already](#9-use-extpayopenloginpage-to-let-the-user-log-in-if-theyve-paid-already)
+  6. [Use `extpay.getPlans()` to list available payment plans](#6-use-extpaygetplans-to-list-available-payment-plans)
+  7. [Use `extpay.onPaid.addListener()` to run code when the user pays](#7-use-extpayonpaidaddlistener-to-run-code-when-the-user-pays)
+  8. [Use `extpay.openPaymentPage()` to let the user manage their subscription](#8-use-extpayopenpaymentpage-to-let-the-user-manage-their-subscription)
+  9. [Use `extpay.openTrialPage()` to let the user sign up for a free trial](#9-use-extpayopentrialpage-to-let-the-user-sign-up-for-a-free-trial)
+  10. [Use `extpay.openLoginPage()` to let the user log in if they've paid already](#10-use-extpayopenloginpage-to-let-the-user-log-in-if-theyve-paid-already)
 
 **Note**: ExtPay.js doesn't contain malware or track your users in any way. This library only communicates with ExtensionPay.com servers to manage users' paid status.
 
@@ -37,11 +38,12 @@ If you like this library, please star it! ⭐️ It helps us out :)
 
 ## 1. Install
 
-Copy the [dist/ExtPay.js](dist/ExtPay.js) file into your project, or, if you're using a bundler (like Webpack or Rollup):
-
 ```bash
 npm install extpay --save
 ```
+
+If you're not using a bundler, you can copy the [dist/ExtPay.js](dist/ExtPay.js) file into your project (or [ExtPay.module.js](dist/ExtPay.module.js) for ESM / [ExtPay.common.js](dist/ExtPay.common.js) for Common JS). 
+
 
 
 ## 2. Configure your `manifest.json`
@@ -151,30 +153,82 @@ The `user` object returned from `extpay.getUser()` has the following properties:
 | `user.email` | The user's email if there is one or `null`.|
 | `user.installedAt` | `Date()` object the user installed the extension. |
 | `user.trialStartedAt` | `null` or `Date()` object the user confirmed their free trial. |
+| `user.plan` | `null` or the `plan` the user is on.  For example: `{unitAmountCents: 1000, currency: 'usd', nickname: null, intervalCount: 1, interval: 'month'}`. Unpaid users never have a plan. See `extpay.getPlans()` elsewhere in this README for more detail. |
 | **subscription only**| |
 | `user.subscriptionStatus` | One of `active`, `past_due`, or `canceled`. `active` means the user's subscription is paid-for. `past_due` means the user's most recent subscription payment has failed (expired card, insufficient funds, etc). `canceled` means that the user has canceled their subscription and the end of their last paid period has passed. [You can read more about how subscriptions work here](/docs/how_subscriptions_work.md). |
 | `user.subscriptionCancelAt` | `null` or `Date()` object that the user's subscription is set to cancel or did cancel at. |
 
 ## 5. Use `extpay.openPaymentPage()` to let the user pay
 
-Opens a browser popup where the user can pay to upgrade their status.
+Opens a new browser tab where the user can pay to upgrade their status.
 ```js
-extpay.openPaymentPage()
+extpay.openPaymentPage([planNickname])
 ```
 The payment page looks like this:
 
-![popup screenshot](docs/popup_screenshot.png)
+![Payment plan choosing page](docs/plan_choosing_screenshot.png)
 
-Note: `extpay.openPaymentPage()` can fail to open the popup if there is a network error. Please consider this possibility in your code.
+The plan buttons take you to a Stripe Checkout page:
+
+![Screenshot of Stripe Checkout page](docs/stripe_checkout.png)
+
+Note: `extpay.openPaymentPage()` can fail to open the tab if there is a network error. Please consider this possibility in your code.
+
+You can optionally include your `planNickname` as an argument to `extpay.openPaymentPage(planNickname)` to directly open the Stripe payment page for that plan. For example: `extpay.openPaymentPage('my_plan_nickname')`. Plan nicknames can be edited in the ExtensionPay.com extension settings page. 
+
+While developing your extension in test mode, you will need to enter your account password in order to proceed to the Stripe Checkout page. This is to prevent fraudulent access to your extension. You can use [Stripe's test cards](https://docs.stripe.com/testing) in order to test the payment experience in development.
 
 It is best to open the payment page when the user has a clear idea of what they're paying for.
 
-While testing, use your ExtensionPay email to test payments without entering credit card information. Reinstall the extension to reset back to an unpaid user.
-
 Depending on how you configure your extension, users that have paid before can log in to activate their paid features on different browsers, profiles, or after uninstalling/reinstalling.
 
+You should turn on as many [payment methods in your Stripe settings](https://dashboard.stripe.com/settings/payment_methods) as possible to maximize your revenue.
 
-## 6. Use `extpay.onPaid.addListener()` to run code when the user pays
+Also see [our guide for how to create coupon / discount codes for your extensions](/docs/discount_code_guide.md).
+
+## 6. Use `extpay.getPlans()` to list available payment plans
+
+For example, an extension with a $10 monthly and $99 yearly plan might look like this:
+
+```typescript
+  > await extpay.getPlans();
+  [
+    {
+      unitAmountCents: 1000,
+      currency: 'usd',
+      nickname: null,
+      intervalCount: 'month',
+      interval: 1
+    },
+    {
+      unitAmountCents: 9900,
+      currency: 'usd',
+      nickname: null,
+      intervalCount: 'year',
+      interval: 1
+    }
+  ]
+```
+
+The specification for plans looks like this:
+```typescript
+  interface Plan {
+    unitAmountCents: number;
+    currency: string;
+    nickname: string | null;
+    interval: 'month' | 'year' | 'once';
+    intervalCount: number | null;
+  }
+```
+| property | description |
+| --- | --- |
+| `plan.unitAmountCents` | The amount in cents that the user pays in one interval. |
+| `plan.currency` | The ISO 4217 currency the unit amount is in. For example: `'usd'` |
+| `plan.nickname` | An optional plan nickname for the developer to use in identifying plans. Can be editing in extension settings. |
+| `plan.interval` | The recurring interval the plan is charged. One of `'month'`, `'year'`, or `'once'`. |
+| `plan.intervalCount` | `null` if `interval` is `'once'`, otherwise the number of intervals the plan is charged. For example: an `intervalCount` of `2` with an `interval` of `'month'` would mean the plan charges every 2 months. |
+
+## 7. Use `extpay.onPaid.addListener()` to run code when the user pays
 
 If you want to run some code when your user pays for the first time, use `extpay.onPaid.addListener()`:
 
@@ -205,9 +259,9 @@ You can add as many callback functions as you want.
 Note: `onPaid` callbacks will be called after a user pays as well as after a user "logs in" (e.g. activates their paid account on a different browser/profile/install). This may change in the future -- if you'd like this to work differently, please contact me with a detailed explanation of your use case :)
 
 
-## 7. Use `extpay.openPaymentPage()` to let the user manage their subscription preferences
+## 8. Use `extpay.openPaymentPage()` to let the user manage their subscription
 
-If your extension is configured for subscription payments, you can let the user manage their subscription from within the extension with the same function you used to let them pay:
+If your extension is configured for subscription payments, you should let the user manage/cancel their subscription from within the extension with the same function you used to let them pay:
 
 ```js
 extpay.openPaymentPage()
@@ -215,12 +269,13 @@ extpay.openPaymentPage()
 
 The subscription management page looks something like this:
 
-<img src="docs/subscription_management_screenshot.png" alt="Screenshot of example subscription management page." width="400"> 
+<img src="docs/subscription_management_screenshot.png" alt="Screenshot of example subscription management page."> 
+Obviously you should allow your users to access this page in order to cancel their subscription!
 
 Note: please read the **[detailed docs on subscriptions here](/docs/how_subscriptions_work.md)**.
 
 
-## 8. Use `extpay.openTrialPage()` to let the user sign up for a free trial
+## 9. Use `extpay.openTrialPage()` to let the user sign up for a free trial
 
 If you want to give your users a trial period of your extension, you can use `extpay.openTrialPage()`, which looks something like this:
 
@@ -241,6 +296,9 @@ extpay.getUser().then(user => {
         // user's trial is not active
     }
 })
+
+After users start a trial, the user object will have the `trialStartedAt` property populated. If users uninstall and reinstall your extension and then attempt to start a new trial using the same email they previously used, they will be instantly "logged in" to their existing free trial without needing to confirm instead of starting a new trial or being rejected. Their `trialStartedAt` will be the same. If this is confusing, please try it out in development!
+
 ```
 
 Note that `extpay.openTrialPage(displayText)` takes an optional string argument that is displayed to the user on the trial page. For example, `extpay.openTrialPage('7-day')` would change the trial prompt from `Enter an email to start your free trial` to `Enter an email to start your *7-day* free trial`. This is meant to give your users a better idea of what they're signing up for.
@@ -259,7 +317,7 @@ You can also use `extpay.onTrialStarted.addListener()` to run functions when the
 }
 ```
 
-## 9. Use `extpay.openLoginPage()` to let the user log in if they've paid already
+## 10. Use `extpay.openLoginPage()` to let the user log in if they've paid already
 
 A page will open that will allow the user to enter the email they paid with to receive a magic login link. This page can also be accessed through the normal payment screen.
 

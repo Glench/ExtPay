@@ -20,6 +20,12 @@ When users successfully pay for your extension they will see a screen that looks
 
 You can open this screen programmatically by running `extpay.openPaymentPage()` after the user has paid. You should allow the user to open this page from within your extension.
 
+In development, you will see this page instead:
+
+<img src="dev_subscription_management_screenshot.png" alt="Screenshot of example subscription management page." width="400">
+
+This will allow you to change the subscription status while testing your extension in development mode. You may also view the user's Stripe subscription management page if you like and test canceling / uncanceling from there.
+
 ## Subscription Lifecycle
 
 When a user successfully pays for a subscription, their `subscriptionStatus` from [`extpay.getUser()`](../#4-use-extpaygetuser-to-check-a-users-paid-status) is set to **`active`** and `user.paid` is `true`.
