@@ -67,13 +67,13 @@ const extpay = ExtPay('my-extension-id');
 
 extpay.getUser().then(user => {
 
-    if (user.paid) {
+    if (user.paid && !user.subscriptionCancelAt) {
         console.log("You're paid!")
+    } else if (user.paid && user.subscriptionCancelAt) {
+        console.log("Your subscription will end at the next billing cycle")
     } else if (user.subscriptionStatus === 'past_due') {
         console.log("You need to update your card!");
         extpay.openPaymentPage();
-    } else if (user.subscriptionCancelAt && user.subscriptionCancelAt < new Date()) {
-        console.log("Your subscription will cancel soon.")
     } else if (user.subscriptionStatus === 'canceled') {
         console.log("We hope you enjoyed your subscription!")
     } else {

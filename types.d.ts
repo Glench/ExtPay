@@ -14,6 +14,9 @@ declare module "extpay" {
     /** date that the user first paid or null. */
     paidAt: Date | null
 
+    /** The user's email if there is one or `null`. */
+    email: string | null
+
     /** date the user installed the extension. */
     installedAt: Date
 
