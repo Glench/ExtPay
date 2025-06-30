@@ -35,7 +35,6 @@ declare module "extpay" {
     subscriptionCancelAt?: string | null;
   }
 
-
   interface ExtPay {
     getUser: () => Promise<User>;
     getPlans: () => Promise<Plan[]>;
