@@ -4,7 +4,10 @@
 // And don't forget to change the ID in background.js too!
 const extpay = ExtPay('sample-extension') 
 
-document.querySelector('button').addEventListener('click', extpay.openPaymentPage)
+document.querySelector('button').addEventListener('click', function(evt) {
+    evt.preventDefault();
+    extpay.openPaymentPage();
+})
 
 extpay.getUser().then(user => {
     if (user.paid) {
