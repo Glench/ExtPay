@@ -184,7 +184,7 @@ Depending on how you configure your extension, users that have paid before can l
 
 You should turn on as many [payment methods in your Stripe settings](https://dashboard.stripe.com/settings/payment_methods) as possible to maximize your revenue.
 
-Also see [our guide for how to create coupon / discount codes for your extensions](/docs/discount_code_guide.md).
+Also see [our guide for how to create coupon / discount / promotion codes for your extensions](/docs/discount_code_guide.md).
 
 ## 6. Use `extpay.getPlans()` to list available payment plans
 
