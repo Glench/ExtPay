@@ -1,53 +1,220 @@
 // Sign up at https://extensionpay.com to use this library. AGPLv3 licensed.
 // WARNING: DON'T USE THIS FILE IN YOUR EXTENSION. USE A FILE FROM THE /dist FOLDER INSTEAD.
 
-
 import * as browser from 'webextension-polyfill';
 
+class ExtPayEngine {
+  host = "https://extensionpay.com";
+  extensionUrl = "";
 
-// For running as a content script. Receive a message from the successful payments page
-// and pass it on to the background page to query if the user has paid.
-if (typeof window !== 'undefined') {
-    window.addEventListener('message', (event) => {
-        if (event.origin !== 'http://localhost:3000') return;
-        if (event.source != window) return;
-        if (event.data === 'extpay-fetch-user' || event.data === 'extpay-trial-start') {
-            window.postMessage(`${event.data}-received`)
-            browser.runtime.sendMessage(event.data)
-        }
-    }, false);
+  extPayStorage;
+  extPayPages;
+  extPayUser;
+  extPayLifeCycle;
+
+  constructor(extensionId) {
+    this.extensionUrl = `${this.host}/extension/${extensionId}`;
+
+    this.extPayStorage = new ExtPayStorage(this.host, this.extensionUrl);
+    this.extPayPages = new ExtPayPages(this.extensionUrl, this.extPayStorage);
+    this.extPayUser = new ExtPayUser(this.extensionUrl, this.extPayStorage);
+
+    this.extPayLifeCycle = new ExtPayLifeCycle(this.extPayStorage, this.extPayUser);
+    this.extPayLifeCycle.start();
+  }
+
+  getApi() {
+    return {
+      getUser: this.extPayUser.getUser,
+      getPlans: this.extPayUser.getPlans,
+
+      // Pages
+      openPaymentPage: this.extPayPages.openPaymentPage,
+      openTrialPage: this.extPayPages.openTrialPage,
+      openLoginPage: this.extPayPages.openLoginPage,
+
+      // Events
+      onTrialStarted: {
+        addListener: this.extPayUser.onTrialStartedEvent.addListener,
+        removeListener: this.extPayUser.onTrialStartedEvent.removeListener,
+      },
+      onPaid: {
+        addListener: this.extPayUser.onPaidEvent.addListener,
+        removeListener: this.extPayUser.onPaidEvent.removeListener,
+      },
+    };
+  }
 }
 
-export default function ExtPay(extension_id) {
+class ExtPayStorage {
+  host;
+  extensionUrl;
 
-    const HOST = `http://localhost:3000`
-    const EXTENSION_URL = `${HOST}/extension/${extension_id}`
+  constructor(host, extensionUrl) {
+    this.host = host;
+    this.extensionUrl = extensionUrl;
+  }
 
-    function timeout(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
+  get = async (keys) => {
+    try {
+      return await browser.storage.sync.get(keys);
+    } catch (e) {
+      // if sync not available (like with Firefox temp addons), fall back to local
+      return await browser.storage.local.get(keys);
     }
-    async function get(key) {
-        try {
-            return await browser.storage.sync.get(key)
-        } catch(e) {
-            // if sync not available (like with Firefox temp addons), fall back to local
-            return await browser.storage.local.get(key)
-        }
+  }
+
+  set = async (dict) => {
+    try {
+      return await browser.storage.sync.set(dict);
+    } catch (e) {
+      // if sync not available (like with Firefox temp addons), fall back to local
+      return await browser.storage.local.set(dict);
     }
-    async function set(dict) {
-        try {
-            return await browser.storage.sync.set(dict)
-        } catch(e) {
-            // if sync not available (like with Firefox temp addons), fall back to local
-            return await browser.storage.local.set(dict)
-        }
+  }
+
+  remove = async (keys) => {
+    try {
+      return await browser.storage.sync.remove(keys);
+    } catch (e) {
+      // if sync not available (like with Firefox temp addons), fall back to local
+      return await browser.storage.local.remove(keys);
+    }
+  }
+
+  getOrCreateKey = async () => {
+    return await this.getKey() ?? await this.createKey();
+  }
+
+  getKey = async () => {
+    const storage = await this.get(['extensionpay_api_key']);
+
+    if (storage.extensionpay_api_key) {
+      return storage.extensionpay_api_key;
     }
 
-    // ----- start configuration checks
-    browser.management && browser.management.getSelf().then(async (ext_info) => {
-        if (!ext_info.permissions.includes('storage')) {
-            var permissions = ext_info.hostPermissions.concat(ext_info.permissions)
-            throw `ExtPay Setup Error: please include the "storage" permission in manifest.json["permissions"] or else ExtensionPay won't work correctly.
+    return null;
+  }
+
+  createKey = async () => {
+    const ext_info = await this.getExtensionInfo();
+
+    const body = {
+      development: ext_info.installType === 'development',
+    };
+
+    const resp = await fetch(`${this.extensionUrl}/api/new-key`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
+
+    if (!resp.ok) {
+      throw resp.status, `${this.host}/home`;
+    }
+
+    const api_key = await resp.json();
+    await this.set({ extensionpay_api_key: api_key });
+
+    return api_key;
+  }
+
+  getExtensionInfo = async () => {
+    if (browser.management) {
+      return browser.management.getSelf();
+    }
+
+    if (browser.runtime) {
+      const ext_info = await browser.runtime.sendMessage('extpay-extinfo'); // ask background page for ext info
+
+      if (ext_info) {
+        return ext_info;
+      }
+
+      // Safari doesn't support browser.management for some reason
+      const is_dev_mode = !('update_url' in browser.runtime.getManifest());
+
+      return {
+        installType: is_dev_mode ? 'development' : 'normal',
+      };
+    }
+
+    throw 'ExtPay needs to be run in a browser extension context';
+  }
+}
+
+class ExtPayLifeCycle {
+  extPayStorage;
+  extPayUser;
+
+  constructor(extPayStorage, extPayUser) {
+    this.extPayStorage = extPayStorage;
+    this.extPayUser = extPayUser;
+  }
+
+  start = () => {
+    // For running as a content script. Receive a message from the successful payments page
+    // and pass it on to the background page to query if the user has paid.
+    if (typeof window !== 'undefined') {
+      this.startContentScript();
+      this.clearEventStorage();
+    } else {
+      this.startBackground();
+      this.validateSettings();
+    }
+  }
+
+  startContentScript = () => {
+    window.addEventListener('message', (event) => {
+      if (event.origin !== 'https://extensionpay.com' && event.source !== window) {
+        return;
+      }
+
+      if (event.data === 'extpay-fetch-user' || event.data === 'extpay-trial-start') {
+        window.postMessage(`${event.data}-received`);
+        browser.runtime.sendMessage(event.data);
+      }
+    });
+  }
+
+  startBackground = () => {
+    browser.runtime.onMessage.addListener((message, sender, send_response) => {
+      switch (message) {
+        case "extpay-fetch-user":
+          // Only called via extensionpay.com/extension/[extension-id]/paid -> content_script when user successfully pays.
+          // It's possible attackers could trigger this but that is basically harmless. It would just query the user.
+          return this.extPayUser.pollUserPaid();
+
+        case "extpay-trial-start":
+          // no need to poll since the trial confirmation page has already set trialStartedAt
+          return this.extPayUser.getUser();
+
+        case "extpay-extinfo":
+          // get this message from content scripts which can't access browser.management
+          return browser.management?.getSelf();
+      }
+    });
+  }
+
+  clearEventStorage = () => {
+    this.extPayUser.onPaidEvent.reset();
+    this.extPayUser.onTrialStartedEvent.reset();
+  }
+
+  validateSettings = async () => {
+    if (!browser.management) {
+      return;
+    }
+
+    const ext_info = await browser.management.getSelf();
+
+    if (!ext_info.permissions.includes('storage')) {
+      const permissions = ext_info.hostPermissions.concat(ext_info.permissions);
+
+      throw `ExtPay Setup Error: please include the "storage" permission in manifest.json["permissions"] or else ExtensionPay won't work correctly.
 
 You can copy and paste this to your manifest.json file to fix this error:
 
@@ -55,290 +222,242 @@ You can copy and paste this to your manifest.json file to fix this error:
     ${permissions.map(x => `"    ${x}"`).join(',\n')}${permissions.length > 0 ? ',' : ''}
     "storage"
 ]
-`
-        }
-
-    })
-    // ----- end configuration checks
-
-    // run on "install"
-    get(['extensionpay_installed_at', 'extensionpay_user']).then(async (storage) => {
-        if (storage.extensionpay_installed_at) return;
-
-        // Migration code: before v2.1 installedAt came from the server
-        // so use that stored datetime instead of making a new one.
-        const user = storage.extensionpay_user;
-        const date = user ? user.installedAt : (new Date()).toISOString();
-        await set({'extensionpay_installed_at': date})
-    })
-
-    const paid_callbacks = [];
-    const trial_callbacks =  [];
-
-    async function create_key() {
-        var body = {};
-        var ext_info;
-        if (browser.management) {
-            ext_info = await browser.management.getSelf();
-        } else if (browser.runtime) {
-            ext_info = await browser.runtime.sendMessage('extpay-extinfo') // ask background page for ext info
-            if (!ext_info) {
-                // Safari doesn't support browser.management for some reason
-                const is_dev_mode = !('update_url' in browser.runtime.getManifest());
-                ext_info = {installType: is_dev_mode ? 'development' : 'normal'}
-            }
-        } else {
-            throw 'ExtPay needs to be run in a browser extension context'
-        }
-
-        if (ext_info.installType == 'development') {
-            body.development = true;
-        } 
-
-        const resp = await fetch(`${EXTENSION_URL}/api/new-key`, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-type': 'application/json',
-            },
-            body: JSON.stringify(body),
-        })
-        if (!resp.ok) {
-            throw 'ExtPay: Error generating key. Server response: ', resp.status, `Are you sure you registered your extension on extensionpay.com? Check at this URL and make sure the ID matches '${extension_id}':`, `${HOST}/home`
-        }
-        const api_key = await resp.json();
-        await set({extensionpay_api_key: api_key})
-        return api_key;
+`;
     }
-
-    async function get_key() {
-        const storage = await get(['extensionpay_api_key']);
-        if (storage.extensionpay_api_key) {
-            return storage.extensionpay_api_key;
-        }
-        return null;
-    }
-
-    const datetime_re = /^\d\d\d\d-\d\d-\d\dT/;
-
-    async function fetch_user() {
-        var storage = await get(['extensionpay_user', 'extensionpay_installed_at'])
-        const api_key = await get_key()
-        if (!api_key) {
-            return {
-                paid: false,
-                paidAt: null,
-                installedAt: storage.extensionpay_installed_at ? new Date(storage.extensionpay_installed_at) : new Date(), // sometimes this function gets called before the initial install time can be flushed to storage
-                trialStartedAt: null,
-            }
-        }
-
-        const resp = await fetch(`${EXTENSION_URL}/api/v2/user?api_key=${api_key}`, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-            }
-        })
-        // TODO: think harder about error states and what users will want (bad connection, server error, id not found)
-        if (!resp.ok) throw 'ExtPay error while fetching user: '+(await resp.text())
-
-        const user_data = await resp.json();
-
-        const parsed_user = {}
-        for (var [key, value] of Object.entries(user_data)) {
-            if (value && value.match && value.match(datetime_re)) {
-                value = new Date(value)
-            }
-            parsed_user[key] = value
-        }
-        parsed_user.installedAt = new Date(storage.extensionpay_installed_at);
-          
-
-        if (parsed_user.paidAt) {
-            if (!storage.extensionpay_user || (storage.extensionpay_user && !storage.extensionpay_user.paidAt)) {
-                paid_callbacks.forEach(cb => cb(parsed_user))
-            }
-        }
-        if (parsed_user.trialStartedAt) {
-            if (!storage.extensionpay_user || (storage.extensionpay_user && !storage.extensionpay_user.trialStartedAt)) {
-                trial_callbacks.forEach(cb => cb(parsed_user))
-            }
-
-        }
-        await set({extensionpay_user: user_data})
-
-        return parsed_user;
-    }
-
-    async function get_plans() {
-        const resp = await fetch(`${EXTENSION_URL}/api/v2/current-plans`, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-type': 'application/json',
-            },
-        })
-        if (!resp.ok) {
-            throw `ExtPay: HTTP error while getting plans. Received http code: ${resp.status}`
-        }
-        return await resp.json();
-    }
-
-    async function open_popup(url, width, height) {
-        if (browser.windows && browser.windows.create) {
-            const current_window = await browser.windows.getCurrent()
-            // https://stackoverflow.com/a/68456858
-            const left = Math.round((current_window.width - width) * 0.5 + current_window.left)
-            const top = Math.round((current_window.height - height) * 0.5 + current_window.top)
-            try {
-                browser.windows.create({
-                    url: url,
-                    type: "popup",
-                    focused: true,
-                    width,
-                    height,
-                    left,
-                    top
-                })
-            } catch(e) {
-                // firefox doesn't support 'focused'
-                browser.windows.create({
-                    url: url,
-                    type: "popup",
-                    width,
-                    height,
-                    left,
-                    top
-                })
-            }
-        } else {
-            // for opening from a content script
-            // https://developer.mozilla.org/en-US/docs/Web/API/Window/open
-            window.open(url, null, `toolbar=no,location=no,directories=no,status=no,menubar=no,width=${width},height=${height},left=450`)
-        }
-    }
-
-    async function open_payment_page(plan_nickname) {
-        var api_key = await get_key();
-        if (!api_key) {
-            api_key = await create_key();
-        }
-        let url = `${EXTENSION_URL}/choose-plan?api_key=${api_key}`
-        if (plan_nickname) {
-            url = `${EXTENSION_URL}/choose-plan/${plan_nickname}?api_key=${api_key}`
-        }
-        if (browser.tabs && browser.tabs.create) {
-            await browser.tabs.create({url, active: true})
-        } else {
-            window.open(url, '_blank')
-        }
-    }
-
-    async function open_trial_page(period) {
-        // let user have period string like '1 week' e.g. "start your 1 week free trial"
-
-        var api_key = await get_key();
-        if (!api_key) {
-            api_key = await create_key();
-        }
-        var url = `${EXTENSION_URL}/trial?api_key=${api_key}`
-        if (period) {
-            url += `&period=${period}`
-        }
-        open_popup(url, 500, 700)
-    }
-    async function open_login_page() {
-        var api_key = await get_key();
-        if (!api_key) {
-            api_key = await create_key();
-        }
-        const url = `${EXTENSION_URL}/reactivate?api_key=${api_key}&back=choose-plan&v2`
-        open_popup(url, 500, 800)
-    }
-
-    var polling = false;
-    async function poll_user_paid() {
-        // keep trying to fetch user in case stripe webhook is late
-        if (polling) return;
-        polling = true;
-        var user = await fetch_user()
-        for (var i=0; i < 2*60; ++i) {
-            if (user.paidAt) {
-                polling = false;
-                return user;
-            }
-            await timeout(1000)
-            user = await fetch_user()
-        }
-        polling = false;
-    }
-
-
-    
-    return {
-        getUser: function() {
-            return fetch_user()
-        },
-        onPaid: {
-            addListener: function(callback) {
-                const content_script_template = `"content_scripts": [
-                {
-            "matches": ["${HOST}/*"],
-            "js": ["ExtPay.js"],
-            "run_at": "document_start"
-        }]`
-                const manifest = browser.runtime.getManifest();
-                if (!manifest.content_scripts) {
-                    throw `ExtPay setup error: To use the onPaid callback handler, please include ExtPay as a content script in your manifest.json. You can copy the example below into your manifest.json or check the docs: https://github.com/Glench/ExtPay#2-configure-your-manifestjson
-
-        ${content_script_template}`
-                }
-                const extpay_content_script_entry = manifest.content_scripts.find(obj => {
-                    // removing port number because firefox ignores content scripts with port number
-                    return obj.matches.includes(HOST.replace(':3000', '')+'/*')
-                })
-                if (!extpay_content_script_entry) {
-                    throw `ExtPay setup error: To use the onPaid callback handler, please include ExtPay as a content script in your manifest.json matching "${HOST}/*". You can copy the example below into your manifest.json or check the docs: https://github.com/Glench/ExtPay#2-configure-your-manifestjson
-
-        ${content_script_template}`
-                } else {
-                    if (!extpay_content_script_entry.run_at || extpay_content_script_entry.run_at !== 'document_start') {
-                        throw `ExtPay setup error: To use the onPaid callback handler, please make sure the ExtPay content script in your manifest.json runs at document start. You can copy the example below into your manifest.json or check the docs: https://github.com/Glench/ExtPay#2-configure-your-manifestjson
-
-        ${content_script_template}`
-                    }
-                }
-
-                paid_callbacks.push(callback)
-            },
-            // removeListener: function(callback) {
-            //     // TODO
-            // }
-        },
-        getPlans: get_plans,
-        openPaymentPage: open_payment_page,
-        openTrialPage: open_trial_page,
-        openLoginPage: open_login_page,
-        onTrialStarted: {
-            addListener: function(callback) {
-                trial_callbacks.push(callback)
-            }
-        },
-        startBackground: function() {
-            browser.runtime.onMessage.addListener(function(message, sender, send_response) {
-                if (message == 'extpay-fetch-user') {
-                    // Only called via extensionpay.com/extension/[extension-id]/paid -> content_script when user successfully pays.
-                    // It's possible attackers could trigger this but that is basically harmless. It would just query the user.
-                    poll_user_paid()
-                } else if (message == 'extpay-trial-start') {
-                    // no need to poll since the trial confirmation page has already set trialStartedAt
-                    fetch_user() 
-                } else if (message == 'extpay-extinfo' && browser.management) {
-                    // get this message from content scripts which can't access browser.management
-                    return browser.management.getSelf()
-                } 
-            });
-        }
-    }
+  }
 }
 
+class ExtPayPages {
+  extensionUrl;
+  extPayStorage;
+
+  constructor(extensionUrl, extPayStorage) {
+    this.extensionUrl = extensionUrl;
+    this.extPayStorage = extPayStorage;
+  }
+
+  openPaymentPage = async (plan_nickname) => {
+    const apiKey = await this.extPayStorage.getOrCreateKey();
+
+    let url = `${this.extensionUrl}/choose-plan?api_key=${apiKey}`;
+
+    if (plan_nickname) {
+      url = `${this.extensionUrl}/choose-plan/${plan_nickname}?api_key=${apiKey}`;
+    }
+
+    if (browser.tabs && browser.tabs.create) {
+      await browser.tabs.create({ url, active: true });
+    } else {
+      window.open(url, '_blank');
+    }
+  }
+
+  openTrialPage = async (period) => {
+    // let user have period string like '1 week' e.g. "start your 1 week free trial"
+    const apiKey = await this.extPayStorage.getOrCreateKey();
+
+    let url = `${this.extensionUrl}/trial?api_key=${apiKey}`;
+    if (period) {
+      url += `&period=${period}`;
+    }
+
+    this.openPopup(url, 500, 700);
+  }
+
+  openLoginPage = async (back = "choose-plan") => {
+    const api_key = await this.extPayStorage.getOrCreateKey();
+    const url = `${this.extensionUrl}/reactivate?api_key=${api_key}&back=${back}&v2`;
+    this.openPopup(url, 500, 800);
+  }
+
+  openPopup = async (url, width, height) => {
+    if (browser.windows && browser.windows.create) {
+      const current_window = await browser.windows.getCurrent();
+      // https://stackoverflow.com/a/68456858
+      const left = Math.round((current_window.width - width) * 0.5 + current_window.left);
+      const top = Math.round((current_window.height - height) * 0.5 + current_window.top);
+
+      try {
+        browser.windows.create({
+          url,
+          type: "popup",
+          focused: true,
+          width,
+          height,
+          left,
+          top,
+        });
+      } catch (e) {
+        // firefox doesn't support 'focused'
+        browser.windows.create({
+          url,
+          type: "popup",
+          width,
+          height,
+          left,
+          top,
+        });
+      }
+    } else {
+      // for opening from a content script
+      // https://developer.mozilla.org/en-US/docs/Web/API/Window/open
+      window.open(
+        url,
+        undefined,
+        `toolbar=no,location=no,directories=no,status=no,menubar=no,width=${width},height=${height},left=450`,
+      );
+    }
+  }
+}
+
+class ExtPayUser {
+  extensionUrl;
+  extPayStorage;
+  polling = false;
+
+  onPaidEvent;
+  onTrialStartedEvent;
+  
+  constructor(extensionUrl, extPayStorage) {
+    this.extensionUrl = extensionUrl;
+    this.extPayStorage = extPayStorage;
+
+    this.onPaidEvent = new ExtPayEvent("extensionpay_event_paid", this.extPayStorage);
+    this.onTrialStartedEvent = new ExtPayEvent("extensionpay_event_trial_started", this.extPayStorage);
+  }
+
+  getUser = async () => {
+    const [storage, apiKey] = await Promise.all([
+      this.extPayStorage.get("extensionpay_user"),
+      this.extPayStorage.getKey(),
+    ]);
+
+    if (!apiKey) {
+      return {
+        paid: false,
+        paidAt: null,
+        installedAt: new Date().toISOString(), // sometimes this function gets called before the initial install time can be flushed to storage
+        trialStartedAt: null,
+      };
+    }
+
+    const resp = await fetch(`${this.extensionUrl}/api/v2/user?api_key=${apiKey}`, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+      }
+    });
+
+    // TODO: think harder about error states and what users will want (bad connection, server error, id not found)
+    if (!resp.ok) {
+      const error = await resp.text();
+      throw `ExtPay error while fetching user: ${error}`;
+    }
+
+    const user_data = await resp.json();
+
+    await this.extPayStorage.set({ extensionpay_user: user_data });
+
+    if (user_data.paidAt) {
+      if (!storage.extensionpay_user || (storage.extensionpay_user && !storage.extensionpay_user.paidAt)) {
+        this.onPaidEvent.notify(user_data);
+      }
+    }
+
+    if (user_data.trialStartedAt) {
+      if (!storage.extensionpay_user || (storage.extensionpay_user && !storage.extensionpay_user.trialStartedAt)) {
+        this.onTrialStartedEvent.notify(user_data);
+      }
+
+    }
+
+    return user_data;
+  }
+
+  getPlans = async () => {
+    const resp = await fetch(`${this.extensionUrl}/api/v2/current-plans`, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-type': 'application/json',
+      },
+    });
+
+    if (!resp.ok) {
+      throw `ExtPay: HTTP error while getting plans. Received http code: ${resp.status}`;
+    }
+
+    return resp.json();
+  }
+
+  pollUserPaid = async () => {
+    // keep trying to fetch user in case stripe webhook is late
+    if (this.polling) {
+      return;
+    }
+
+    this.polling = true;
+
+    for (let i = 0; i < 2 * 60; ++i) {
+      const user = await this.getUser();
+
+      if (user.paidAt) {
+        this.polling = false;
+        return user;
+      }
+
+      await this.sleep(1000);
+    }
+
+    this.polling = false;
+  }
+
+  sleep = (ms) => {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+}
+
+class ExtPayEvent {
+  eventName;
+  extPayStorage;
+
+  constructor(eventName, extPayStorage) {
+    this.eventName = eventName;
+    this.extPayStorage = extPayStorage;
+  }
+
+  addListener = (callback) => {
+    const intervalId = setInterval(async () => {
+      const storage = await this.extPayStorage.get(this.eventName);
+
+      if (this.eventName in storage) {
+        callback(storage[this.eventName]);
+        clearInterval(intervalId);
+      }
+    }, 1000);
+
+    return intervalId;
+  }
+
+  removeListener = (listenerId) => {
+    clearInterval(listenerId);
+  }
+
+  notify = (value) => {
+    const data = {};
+    data[this.eventName] = value;
+
+    return this.extPayStorage.set(data);
+  }
+
+  reset = () => {
+    return this.extPayStorage.remove(this.eventName);
+  }
+}
+
+export default function ExtPay(extension_id) {
+  const extpay = new ExtPayEngine(extension_id);
+  const api = extpay.getApi();
+
+  return api;
+};
