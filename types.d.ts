@@ -2,10 +2,11 @@ declare module "extpay" {
   interface Plan {
     unitAmountCents: number
     currency: string
-    nickname: String | null,
+    nickname: string | null,
     interval: "month" | "year" | "once"
     intervalCount: number | null
   }
+  
   interface User {
     /** user.paid is meant to be a simple way to tell if the user should have paid features activated.
      * For subscription payments, paid is only true if subscriptionStatus is active. */
@@ -33,16 +34,7 @@ declare module "extpay" {
     /** date that the user's subscription is set to cancel or did cancel at. */
     subscriptionCancelAt?: Date | null
   }
-
-  interface Plan {
-    unitAmountCents: number;
-    currency: string;
-    nickname: string | null;
-    interval: 'month' | 'year' | 'once';
-    intervalCount: number | null;
-  }
-    
-
+  
   interface ExtPay {
     getUser: () => Promise<User>
     getPlans: () => Promise<Plan[]>
@@ -57,6 +49,6 @@ declare module "extpay" {
     }
     startBackground: () => void
   }
-
+  
   export default function ExtPay(extensionId: string): ExtPay
 }
