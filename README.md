@@ -338,6 +338,8 @@ The first code stored is kept. Pass `{overwrite: true}` to replace it. Codes mus
 
 Recording the code and sending it to ExtensionPay.com is all this library does. Click counts, signup and purchase attribution, commissions, and the developer dashboard are handled by the ExtensionPay.com service. Until that service reads `ref`, storing a code does not change who gets paid.
 
+You can still run a referral program with the tools that exist today: one Stripe promotion code per referrer, plus `setReferral` with that same code. See [How to Run a Referral Program Today](/docs/referral_guide.md).
+
 ## Contributing
 
 1. `npm install`
