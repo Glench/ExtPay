@@ -2,6 +2,9 @@ Changelog
 =========
 This changelog includes both changes in the client-side ExtPay.js library as well as the online service.
 
+### Unreleased
+* Client: `extpay.setReferral(code)` and `extpay.getReferral()` store a referral code and send it as `ref` on the payment, trial, and login URLs, and as `referral` when creating an API key. Attribution, analytics, and commissions still depend on ExtensionPay.com reading that value.
+
 ### ExtensionPay.com April 2026
 * Removed "setup_future_usage" from Stripe API calls which would cause some international payment methods not to work.
 
