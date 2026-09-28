@@ -1304,7 +1304,7 @@ You can copy and paste this to your manifest.json file to fix this error:
 	    const paid_callbacks = [];
 	    const trial_callbacks =  [];
 
-	    async function create_key() {
+	    async function create_key(referral) {
 	        var body = {};
 	        var ext_info;
 	        if (browserPolyfill.management) {
@@ -1322,7 +1322,17 @@ You can copy and paste this to your manifest.json file to fix this error:
 
 	        if (ext_info.installType == 'development') {
 	            body.development = true;
-	        } 
+	        }
+
+	        // Callers that already loaded storage pass the referral (or null) so this
+	        // does not read storage a second time. A direct call loads it once.
+	        if (referral === undefined) {
+	            const storage = await get(['extensionpay_referral']);
+	            referral = storage.extensionpay_referral || null;
+	        }
+	        if (referral && referral.code) {
+	            body.ref = referral.code;
+	        }
 
 	        const resp = await fetch(`${EXTENSION_URL}/api/new-key`, {
 	            method: 'POST',
@@ -1346,6 +1356,52 @@ You can copy and paste this to your manifest.json file to fix this error:
 	            return storage.extensionpay_api_key;
 	        }
 	        return null;
+	    }
+
+	    // One storage read for the checkout/trial/login flows.
+	    async function get_key_and_referral() {
+	        const storage = await get(['extensionpay_api_key', 'extensionpay_referral']);
+	        return {
+	            api_key: storage.extensionpay_api_key || null,
+	            referral: storage.extensionpay_referral || null,
+	        };
+	    }
+
+	    const referral_re = /^[A-Za-z0-9_-]{1,64}$/;
+
+	    async function set_referral(code, options) {
+	        if (typeof code !== 'string' || !referral_re.test(code)) {
+	            throw 'ExtPay: referral code must be 1-64 characters: letters, numbers, "_" or "-".'
+	        }
+	        const overwrite = options && options.overwrite;
+	        if (!overwrite) {
+	            const storage = await get(['extensionpay_referral']);
+	            if (storage.extensionpay_referral && storage.extensionpay_referral.code) {
+	                return;
+	            }
+	        }
+	        await set({
+	            extensionpay_referral: {
+	                code: code,
+	                capturedAt: (new Date()).toISOString(),
+	            }
+	        });
+	    }
+
+	    async function get_referral() {
+	        const storage = await get(['extensionpay_referral']);
+	        const referral = storage.extensionpay_referral;
+	        if (!referral || !referral.code) return null;
+	        return {
+	            code: referral.code,
+	            capturedAt: referral.capturedAt ? new Date(referral.capturedAt) : null,
+	        };
+	    }
+
+	    function append_ref(url, referral) {
+	        if (!referral || !referral.code) return url;
+	        const joiner = url.indexOf('?') === -1 ? '?' : '&';
+	        return `${url}${joiner}ref=${encodeURIComponent(referral.code)}`;
 	    }
 
 	    const datetime_re = /^\d\d\d\d-\d\d-\d\dT/;
@@ -1448,14 +1504,16 @@ You can copy and paste this to your manifest.json file to fix this error:
 	    }
 
 	    async function open_payment_page(plan_nickname) {
-	        var api_key = await get_key();
+	        var stored = await get_key_and_referral();
+	        var api_key = stored.api_key;
 	        if (!api_key) {
-	            api_key = await create_key();
+	            api_key = await create_key(stored.referral);
 	        }
 	        let url = `${EXTENSION_URL}/choose-plan?api_key=${api_key}`;
 	        if (plan_nickname) {
 	            url = `${EXTENSION_URL}/choose-plan/${plan_nickname}?api_key=${api_key}`;
 	        }
+	        url = append_ref(url, stored.referral);
 	        if (browserPolyfill.tabs && browserPolyfill.tabs.create) {
 	            await browserPolyfill.tabs.create({url, active: true});
 	        } else {
@@ -1466,22 +1524,26 @@ You can copy and paste this to your manifest.json file to fix this error:
 	    async function open_trial_page(period) {
 	        // let user have period string like '1 week' e.g. "start your 1 week free trial"
 
-	        var api_key = await get_key();
+	        var stored = await get_key_and_referral();
+	        var api_key = stored.api_key;
 	        if (!api_key) {
-	            api_key = await create_key();
+	            api_key = await create_key(stored.referral);
 	        }
 	        var url = `${EXTENSION_URL}/trial?api_key=${api_key}`;
 	        if (period) {
 	            url += `&period=${period}`;
 	        }
+	        url = append_ref(url, stored.referral);
 	        open_popup(url, 500, 700);
 	    }
 	    async function open_login_page() {
-	        var api_key = await get_key();
+	        var stored = await get_key_and_referral();
+	        var api_key = stored.api_key;
 	        if (!api_key) {
-	            api_key = await create_key();
+	            api_key = await create_key(stored.referral);
 	        }
-	        const url = `${EXTENSION_URL}/reactivate?api_key=${api_key}&back=choose-plan&v2`;
+	        var url = `${EXTENSION_URL}/reactivate?api_key=${api_key}&back=choose-plan&v2`;
+	        url = append_ref(url, stored.referral);
 	        open_popup(url, 500, 800);
 	    }
 
@@ -1545,6 +1607,8 @@ You can copy and paste this to your manifest.json file to fix this error:
 	            // }
 	        },
 	        getPlans: get_plans,
+	        setReferral: set_referral,
+	        getReferral: get_referral,
 	        openPaymentPage: open_payment_page,
 	        openTrialPage: open_trial_page,
 	        openLoginPage: open_login_page,

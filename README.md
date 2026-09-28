@@ -31,6 +31,7 @@ Below are directions for using this library in your browser extension. If you le
   8. [Use `extpay.openPaymentPage()` to let the user manage their subscription](#8-use-extpayopenpaymentpage-to-let-the-user-manage-their-subscription)
   9. [Use `extpay.openTrialPage()` to let the user sign up for a free trial](#9-use-extpayopentrialpage-to-let-the-user-sign-up-for-a-free-trial)
   10. [Use `extpay.openLoginPage()` to let the user log in if they've paid already](#10-use-extpayopenloginpage-to-let-the-user-log-in-if-theyve-paid-already)
+  11. [Use `extpay.setReferral()` to attribute a user to a referral code](#11-use-extpaysetreferral-to-attribute-a-user-to-a-referral-code)
 
 **Note**: ExtPay.js doesn't contain malware or track your users in any way. This library only communicates with ExtensionPay.com servers to manage users' paid status.
 
@@ -157,6 +158,7 @@ The `user` object returned from `extpay.getUser()` has the following properties:
 | **subscription only**| |
 | `user.subscriptionStatus` | One of `active`, `past_due`, or `canceled`. `active` means the user's subscription is paid-for. `past_due` means the user's most recent subscription payment has failed (expired card, insufficient funds, etc). `canceled` means that the user has canceled their subscription and the end of their last paid period has passed. [You can read more about how subscriptions work here](/docs/how_subscriptions_work.md). |
 | `user.subscriptionCancelAt` | `null` or `Date()` object that the user's subscription is set to cancel or did cancel at. |
+| `user.referral` | `null` or `{code, capturedAt}` when the ExtensionPay server includes a referral on the user. Absent until the server supports it. |
 
 ## 5. Use `extpay.openPaymentPage()` to let the user pay
 
@@ -320,6 +322,23 @@ You can also use `extpay.onTrialStarted.addListener()` to run functions when the
 ## 10. Use `extpay.openLoginPage()` to let the user log in if they've paid already
 
 A page will open that will allow the user to enter the email they paid with to receive a magic login link. This page can also be accessed through the normal payment screen.
+
+## 11. Use `extpay.setReferral()` to attribute a user to a referral code
+
+Call `extpay.setReferral(code)` before `openPaymentPage()`, `openTrialPage()`, or `openLoginPage()` when you know which referral link brought the user in. ExtPay stores the code locally and sends it as `ref` on those page URLs and on the API-key request.
+
+```js
+await extpay.setReferral('youtuber123')
+
+const referral = await extpay.getReferral()
+// { code: 'youtuber123', capturedAt: Date }
+```
+
+The first code stored is kept. Pass `{overwrite: true}` to replace it. Codes must be 1–64 characters: letters, numbers, `_`, or `-`.
+
+Recording the code and sending it to ExtensionPay.com is all this library does. Click counts, signup and purchase attribution, commissions, and the developer dashboard are handled by the ExtensionPay.com service. Until that service reads `ref`, storing a code does not change who gets paid.
+
+You can still run a referral program with the tools that exist today: one Stripe promotion code per referrer, plus `setReferral` with that same code. See [How to Run a Referral Program Today](/docs/referral_guide.md).
 
 ## Contributing
 

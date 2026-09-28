@@ -32,6 +32,15 @@ declare module "extpay" {
 
     /** date that the user's subscription is set to cancel or did cancel at. */
     subscriptionCancelAt?: Date | null
+
+    /** referral stored for this user, when the ExtensionPay server returns one. */
+    referral?: Referral | null
+  }
+
+  interface Referral {
+    code: string
+    /** when the referral code was first stored in this browser. */
+    capturedAt: Date | null
   }
 
   interface Plan {
@@ -46,6 +55,9 @@ declare module "extpay" {
   interface ExtPay {
     getUser: () => Promise<User>
     getPlans: () => Promise<Plan[]>
+    /** Store a referral code. The first code is kept unless `overwrite` is true. */
+    setReferral: (code: string, options?: { overwrite?: boolean }) => Promise<void>
+    getReferral: () => Promise<Referral | null>
     onPaid: {
       addListener: (cb: (user: User) => void) => void
     }

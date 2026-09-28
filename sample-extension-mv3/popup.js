@@ -2,7 +2,12 @@
 // registered on ExtensionPay.com to test payments. You may need to
 // uninstall and reinstall the extension to make it work.
 // Don't forget to change the ID in background.js too!
-const extpay = ExtPay('sample-extension') 
+const extpay = ExtPay('sample-extension')
+
+// Store a referral code before checkout. The first code is kept.
+// Attribution on extensionpay.com starts once the server reads `ref`.
+// extpay.setReferral('youtuber123')
+// extpay.getReferral().then(referral => console.log(referral))
 
 document.querySelector('button').addEventListener('click', function(evt) {
     evt.preventDefault();
