@@ -325,7 +325,7 @@ A page will open that will allow the user to enter the email they paid with to r
 
 ## 11. Use `extpay.setReferral()` to attribute a user to a referral code
 
-Call `extpay.setReferral(code)` before `openPaymentPage()`, `openTrialPage()`, or `openLoginPage()` when you know which referral link brought the user in. ExtPay stores the code locally and sends it as `ref` on those page URLs, and as `referral` when it creates the user's API key.
+Call `extpay.setReferral(code)` before `openPaymentPage()`, `openTrialPage()`, or `openLoginPage()` when you know which referral link brought the user in. ExtPay stores the code locally and sends it as `ref` on those page URLs and on the API-key request.
 
 ```js
 await extpay.setReferral('youtuber123')

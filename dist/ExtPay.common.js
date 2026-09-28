@@ -122,7 +122,7 @@ You can copy and paste this to your manifest.json file to fix this error:
             referral = storage.extensionpay_referral || null;
         }
         if (referral && referral.code) {
-            body.referral = referral.code;
+            body.ref = referral.code;
         }
 
         const resp = await fetch(`${EXTENSION_URL}/api/new-key`, {

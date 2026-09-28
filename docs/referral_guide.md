@@ -39,7 +39,7 @@ extpay.openPaymentPage()
 
 `setReferral` keeps the first code it stores. Pass `{overwrite: true}` to replace it. `getReferral()` returns `{code, capturedAt}` or `null`.
 
-ExtPay sends the code as `ref` on the payment, trial, and login page URLs, and as `referral` when it creates the user's API key. ExtensionPay.com does not read those fields yet, so this step does not change who gets paid. It records the code so a future server-side referral program can use it.
+ExtPay sends the code as `ref` on the payment, trial, and login page URLs, and as `ref` when it creates the user's API key. ExtensionPay.com does not read that field yet, so this step does not change who gets paid. It records the code so a future server-side referral program can use it.
 
 Codes must be 1–64 characters: letters, numbers, `_`, or `-`.
 
