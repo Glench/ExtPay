@@ -2,6 +2,11 @@ Changelog
 =========
 This changelog includes both changes in the client-side ExtPay.js library as well as the online service.
 
+### ExtensionPay.com September 2026
+* Fixed minor display issue on mobile browsers with zoom on ExtensionPay landing page.
+* Fixed issue with Portuguese translations on user-facing pages and also filled in missing translations on some pages.
+* Added option in settings to enable Stripe Tax.
+
 ### ExtensionPay.com April 2026
 * Removed "setup_future_usage" from Stripe API calls which would cause some international payment methods not to work.
 
