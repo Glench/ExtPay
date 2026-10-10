@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ExtPay Browser Module</title>
+    <script src="ExtPay.browser.js"></script>
+    <script>
+        const extPay = ExtPayBrowser.ExtPay('sample-extension');
+    </script>
+    <script>
+    </script>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <h1>
+        ExtPay Browser Module Sample
+    </h1>
+    <ol>
+        <li>Click to open trial page or subscription page</li>
+        <li>Install extension</li>
+        <li>Log in to free trial or subscription through extension</li>
+    </ol>
+    <div class="flex">
+        <button onclick="extPay.openTrialPage()">
+            Open Trial Page
+        </button>
+        <button onclick="extPay.openPaymentPage()">
+            Open Payment Page
+        </button>
+    </div>
+</body>
+</html>

@@ -24,6 +24,11 @@ export default {
         name: 'ExtPay'
     },
     {
+        file: 'browser/ExtPay.browser.js',
+        format: 'iife',
+        name: 'ExtPay'
+    },
+    {
         file: 'Safari/ExtensionPay Dev extension/Shared (Extension)/Resources/ExtPay.js',
         format: 'iife',
         name: 'ExtPay'

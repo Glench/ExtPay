@@ -4,6 +4,8 @@ const rollup_resolve = require('@rollup/plugin-node-resolve').nodeResolve
 const rollup_terser = require('rollup-plugin-terser').terser;
 
 const input = 'ExtPay.dev.js'
+const browserInput = 'ExtPay.browser.dev.js'
+
 export default [
     {
         input,
@@ -31,6 +33,24 @@ export default [
             }),
             rollup_commonjs(),
             // rollup_terser(),
+        ]
+    },
+
+    {
+        input: browserInput,
+        output: [{
+            file: 'dist/ExtPay.browser.js',
+            name: 'ExtPay'
+        },
+        {
+            file: 'sample-browser/ExtPay.browser.js',
+            format: 'iife',
+            name: 'ExtPayBrowser'
+        }],
+        plugins: [
+            replace({
+                'http://localhost:3000': 'https://extensionpay.com'
+            })
         ]
     },
 

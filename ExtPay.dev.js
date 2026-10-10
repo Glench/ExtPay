@@ -4,10 +4,12 @@
 
 import * as browser from 'webextension-polyfill';
 
+let apiKey;
 
 // For running as a content script. Receive a message from the successful payments page
 // and pass it on to the background page to query if the user has paid.
 if (typeof window !== 'undefined') {
+    apiKey = window.localStorage?.getItem('extensionpay_api_key');
     window.addEventListener('message', (event) => {
         if (event.origin !== 'http://localhost:3000') return;
         if (event.source != window) return;
@@ -115,6 +117,10 @@ You can copy and paste this to your manifest.json file to fix this error:
         const storage = await get(['extensionpay_api_key']);
         if (storage.extensionpay_api_key) {
             return storage.extensionpay_api_key;
+        }
+        if (apiKey) {
+            await set({ extensionpay_api_key: apiKey });
+            return apiKey;
         }
         return null;
     }
