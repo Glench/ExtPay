@@ -2,6 +2,9 @@ Changelog
 =========
 This changelog includes both changes in the client-side ExtPay.js library as well as the online service.
 
+### ExtPay 3.1.3 November 16 2026
+* Clarified the license to LGPL-3.0.
+
 ### ExtensionPay.com September 2026
 * Fixed minor display issue on mobile browsers with zoom on ExtensionPay landing page.
 * Fixed issue with Portuguese translations on user-facing pages and also filled in missing translations on some pages.
@@ -18,7 +21,10 @@ This changelog includes both changes in the client-side ExtPay.js library as wel
 
 ### ExtensionPay.com September 2025
 * The extension settings page now correctly updates the product name in Stripe in test mode.
-    
+
+### ExtPay 3.1.2
+* Fix sample extension bug. No changes to the ExtPay library itself have been made.
+
 ### ExtPay 3.1.1
 * Fix double function declaration.
 
