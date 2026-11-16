@@ -2,6 +2,23 @@ Changelog
 =========
 This changelog includes both changes in the client-side ExtPay.js library as well as the online service.
 
+### ExtensionPay.com September 2026
+* Fixed minor display issue on mobile browsers with zoom on ExtensionPay landing page.
+* Fixed issue with Portuguese translations on user-facing pages and also filled in missing translations on some pages.
+* Added option in settings to enable Stripe Tax.
+
+### ExtensionPay.com April 2026
+* Removed "setup_future_usage" from Stripe API calls which would cause some international payment methods not to work.
+
+### ExtensionPay.com November 2025
+* Fixed an issue where users that subscribed, canceled, and resubscribed wouldn't be able to log in to their valid subscription.
+
+### ExtensionPay.com October 2025
+* Fixed an issue where some Chrome users would see a "Hmmm" error page incorrectly when activating a trial or logging in.
+
+### ExtensionPay.com September 2025
+* The extension settings page now correctly updates the product name in Stripe in test mode.
+    
 ### ExtPay 3.1.1
 * Fix double function declaration.
 

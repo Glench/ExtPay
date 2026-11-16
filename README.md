@@ -1,5 +1,5 @@
 # ExtPay.js — Monetize browser extensions with payments
-The JavaScript library for [ExtensionPay.com](https://extensionpay.com), a service to easily add payments to browser extensions. So far ExtensionPay has earned extension creators **over $500k and counting**!
+The JavaScript library for [ExtensionPay.com](https://extensionpay.com), a service to easily add payments to browser extensions. So far ExtensionPay has earned extension creators **over $800k and counting**!
 
 ```js
 // Example code
@@ -184,7 +184,7 @@ Depending on how you configure your extension, users that have paid before can l
 
 You should turn on as many [payment methods in your Stripe settings](https://dashboard.stripe.com/settings/payment_methods) as possible to maximize your revenue.
 
-Also see [our guide for how to create coupon / discount codes for your extensions](/docs/discount_code_guide.md).
+Also see [our guide for how to create coupon / discount / promotion codes for your extensions](/docs/discount_code_guide.md).
 
 ## 6. Use `extpay.getPlans()` to list available payment plans
 
@@ -296,10 +296,10 @@ extpay.getUser().then(user => {
         // user's trial is not active
     }
 })
+```
 
 After users start a trial, the user object will have the `trialStartedAt` property populated. If users uninstall and reinstall your extension and then attempt to start a new trial using the same email they previously used, they will be instantly "logged in" to their existing free trial without needing to confirm instead of starting a new trial or being rejected. Their `trialStartedAt` will be the same. If this is confusing, please try it out in development!
 
-```
 
 Note that `extpay.openTrialPage(displayText)` takes an optional string argument that is displayed to the user on the trial page. For example, `extpay.openTrialPage('7-day')` would change the trial prompt from `Enter an email to start your free trial` to `Enter an email to start your *7-day* free trial`. This is meant to give your users a better idea of what they're signing up for.
 
