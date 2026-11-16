@@ -1,6 +1,6 @@
 import * as browser from 'webextension-polyfill';
 
-// Sign up at https://extensionpay.com to use this library. AGPLv3 licensed.
+// Sign up at https://extensionpay.com to use this library.
 
 
 // For running as a content script. Receive a message from the successful payments page

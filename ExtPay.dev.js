@@ -1,4 +1,4 @@
-// Sign up at https://extensionpay.com to use this library. AGPLv3 licensed.
+// Sign up at https://extensionpay.com to use this library.
 // WARNING: DON'T USE THIS FILE IN YOUR EXTENSION. USE A FILE FROM THE /dist FOLDER INSTEAD.
 
 

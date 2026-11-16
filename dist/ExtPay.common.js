@@ -22,7 +22,7 @@ function _interopNamespace(e) {
 
 var browser__namespace = /*#__PURE__*/_interopNamespace(browser);
 
-// Sign up at https://extensionpay.com to use this library. AGPLv3 licensed.
+// Sign up at https://extensionpay.com to use this library.
 
 
 // For running as a content script. Receive a message from the successful payments page
